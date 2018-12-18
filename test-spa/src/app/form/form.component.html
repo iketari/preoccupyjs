@@ -1,0 +1,26 @@
+<form (submit)="onFormSubmit($event)">
+  <label for="textField">Form field #1</label>
+  <input name="textField" id="textField" type="text">
+  <br>
+  <label for="textArea">Form field #2</label>
+  <textarea name="textArea" id="textArea"></textarea>
+  <br>
+  <label for="checkbox">Form field #3</label>
+  <input name="checkbox" type="checkbox" id="checkbox"/>
+  <div>
+    <input type="radio" name="radio" id="contactChoice1"
+     name="contact" value="email">
+    <label for="contactChoice1">Email</label>
+
+    <input type="radio" name="radio" id="contactChoice2"
+     name="contact" value="phone">
+    <label for="contactChoice2">Phone</label>
+
+    <input type="radio" name="radio" id="contactChoice3"
+     name="contact" value="mail">
+    <label for="contactChoice3">Mail</label>
+  </div>
+  <input type="submit" value="submit">
+  <p>Result:</p>
+  <div class="result">{{formResult}}</div>
+</form>

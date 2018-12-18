@@ -12,7 +12,7 @@ export interface TransportEvent {
     detail: any;
 }
 
-export interface PreoccupyTransport {
+export interface AbstractTransport {
     on(type: TransportEvents, callback: Listener): void;
     publish(action: PreoccupyAction): void;
 }
@@ -29,7 +29,7 @@ export class Message {
     }
 
     static parse(src: string): Message {
-        const [type, hash, dataSrc] =  src.split('|');
+        const [_prefix, type, hash, dataSrc] =  src.split('|');
         return new Message(type, JSON.parse(dataSrc), hash);
     }
 };

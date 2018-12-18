@@ -1,0 +1,10 @@
+.pad {
+    border: 1px dashed #888;
+    width: 90vw;
+    height: 60vw;
+}
+
+.pad:focus {
+    outline: none;
+    border-width: 2px;
+}

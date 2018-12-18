@@ -1,19 +1,22 @@
-import { PreoccupyTransport, TransportEvents, Message } from './transports';
-import { ActionUnion, ActionsName } from './actions';
+import { AbstractTransport, TransportEvents, Message } from './transports';
+import { ActionUnion, ActionsName, MoveToAction, ClickToAction, KeypressAction, ScrollByAction } from './actions';
 import { DomController } from './dom';
 
-export default class Client {
+export class Client {
     constructor(
-        transport: PreoccupyTransport,
+        transport: AbstractTransport,
         private dom: DomController
     ) {
         transport.on(TransportEvents.connect, (event) => {
-            console.log(event);
+            console.log('Clinet', event);
             this.calibrate();
+            this.dom.init();
         });
 
         transport.on(TransportEvents.action, (event) => {
             const message: Message = event.detail;
+
+            console.log('Clinet message', message.data)
             this.perform(message.data as ActionUnion); // TODO: Transport for Actions?
         });
     }
@@ -25,11 +28,20 @@ export default class Client {
     public perform(action: ActionUnion) {
         switch (action.type) {
             case ActionsName.MOVE_TO:
-                this.dom.moveCursorTo(action.payload.x, action.payload.y);
+                this.dom.moveCursorTo((<MoveToAction>action).payload);
                 break;
 
             case ActionsName.CLICK_TO:
-                this.dom.clickTo(action.payload.x, action.payload.y);
+                this.dom.clickTo((<ClickToAction>action).payload);
+                break;
+
+            case ActionsName.KEYPRESS:
+                this.dom.keypress((<KeypressAction>action).payload);
+                break;
+
+            case ActionsName.SCROLL_BY:
+                this.dom.scroll((<ScrollByAction>action).payload);
+                break;
 
             default:
                 break;
