@@ -1,5 +1,5 @@
 import { AbstractTransport, TransportEvents, Message } from './transports';
-import { ActionUnion, ActionsName, MoveToAction, ClickToAction, KeypressAction, ScrollByAction } from './actions';
+import { ActionUnion, ActionsName, MoveToAction, ClickToAction, KeypressAction, ScrollByAction, DblClickToAction } from './actions';
 import { DomController } from './dom';
 
 export class Client {
@@ -33,6 +33,10 @@ export class Client {
 
             case ActionsName.CLICK_TO:
                 this.dom.clickTo((<ClickToAction>action).payload);
+                break;
+
+            case ActionsName.DBL_CLICK_TO:
+                this.dom.dblClickTo((<DblClickToAction>action).payload);
                 break;
 
             case ActionsName.KEYPRESS:
