@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "baseHref": "https://artsiom.mezin.eu",
             "outputPath": "dist/test-spa",
             "index": "src/index.html",
             "main": "src/main.ts",
