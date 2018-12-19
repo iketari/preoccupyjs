@@ -1,7 +1,10 @@
 .pad {
+    margin: 10px 5px;
     border: 1px dashed #888;
-    width: 90vw;
-    height: 60vw;
+    width: 100%;
+    height: calc(100vh - 300px);
+    resize: both;
+    overflow: auto;
 }
 
 .pad:focus {
