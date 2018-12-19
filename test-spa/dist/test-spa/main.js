@@ -853,7 +853,7 @@ module.exports = ".pad {\n    margin: 10px 5px;\n    border: 1px dashed #888;\n 
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div tabindex=\"1\" class=\"pad\" #pad></div>\n<button class=\"btn btn-primary\" (click)=\"onConnectClick()\">Connect</button>"
+module.exports = "<div tabindex=\"1\" class=\"pad\" #pad></div>\n<button class=\"btn btn-primary\" [disabled]=\"host\" (click)=\"onConnectClick()\">Connect</button>"
 
 /***/ }),
 
@@ -878,7 +878,7 @@ var ControlComponent = /** @class */ (function () {
     }
     ControlComponent.prototype.ngOnInit = function () { };
     ControlComponent.prototype.onConnectClick = function () {
-        var host = Object(_preoccupyjs__WEBPACK_IMPORTED_MODULE_2__["connect"])(this.padView.nativeElement);
+        this.host = Object(_preoccupyjs__WEBPACK_IMPORTED_MODULE_2__["connect"])(this.padView.nativeElement);
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('pad'),

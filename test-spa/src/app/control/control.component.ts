@@ -9,13 +9,13 @@ import { throttleTime } from 'rxjs/operators';
   styleUrls: ['./control.component.css']
 })
 export class ControlComponent implements OnInit {
-
+  host: any;
   @ViewChild('pad') padView: ElementRef;
   constructor() { }
 
   ngOnInit() {}
 
   public onConnectClick() {
-    const host = connect(this.padView.nativeElement);
+    this.host = connect(this.padView.nativeElement);
   }
 }
