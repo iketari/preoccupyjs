@@ -1,0 +1,8 @@
+.menu {
+    display: flex;
+    align-items: center;
+}
+
+    .menu-item {
+        margin-top: 0;
+    }

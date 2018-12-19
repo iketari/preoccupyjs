@@ -1,17 +1,33 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<button (click)="onActivate()">Activate remote control</button>
 
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a routerLink="/control">Control</a></h2>
-  </li>
-  <li>
-    <h2><a routerLink="/form">Form</a></h2>
-  </li>
-  <li>
-      <h2><a routerLink="/scroll">Scroll</a></h2>
-    </li>
-</ul>
-
-<router-outlet></router-outlet>
+<div class="container">
+<div class="panel">
+  <div class="panel-header text-center">
+    <figure class="avatar avatar-xl"><img src="../assets/occupy_logo.png" alt="Avatar"></figure>
+    <div class="panel-title h5 mt-10">PreoccupyJS</div>
+    <div class="panel-subtitle">Demo App</div>
+  </div>
+  <div class="panel-nav">
+    <ul class="tab tab-block">
+      <li class="tab-item" routerLinkActive="active">
+        <a routerLink="/control">Control</a>
+      </li>
+      <li class="tab-item" routerLinkActive="active">
+        <a routerLink="/form">Form</a>
+      </li>
+      <li class="tab-item" routerLinkActive="active">
+        <a routerLink="/scroll">Scroll</a>
+      </li>
+      <li class="tab-item" routerLinkActive="active">
+        <a routerLink="/ace">Editor</a>
+      </li>
+    </ul>
+  </div>
+  <div class="panel-body">
+    <router-outlet></router-outlet>
+  </div>
+  <div class="panel-footer">
+    <button (click)="onActivate()">Activate remote control</button>
+  </div>
+</div>
+</div>

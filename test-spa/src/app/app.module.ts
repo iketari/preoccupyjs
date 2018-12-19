@@ -7,16 +7,21 @@ import { FormComponent } from './form/form.component';
 import { ControlComponent } from './control/control.component';
 import { ScrollComponent } from './scroll/scroll.component';
 
+import { AceEditorModule } from 'ng2-ace-editor';
+import { AceComponent } from './ace/ace.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     FormComponent,
     ControlComponent,
-    ScrollComponent
+    ScrollComponent,
+    AceComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    AceEditorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

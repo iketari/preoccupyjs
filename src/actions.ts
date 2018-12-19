@@ -3,6 +3,8 @@ export enum ActionsName {
     CLICK_TO = '[Action] Click To',
     DBL_CLICK_TO = '[Action] Double Click To',
     KEYPRESS = '[Action] Keypress',
+    KEYDOWN = '[Action] Keydown',
+    KEYUP = '[Action] Keyup',
     SCROLL_BY = '[Action] Scroll By'
 }
 
@@ -23,6 +25,16 @@ export class ClickToAction implements PreoccupyAction {
 
 export class KeypressAction implements PreoccupyAction {
     public type:string = ActionsName.KEYPRESS;
+    constructor(public payload: {which: number}) {};
+}
+
+export class KeydownAction implements PreoccupyAction {
+    public type:string = ActionsName.KEYDOWN;
+    constructor(public payload: {which: number}) {};
+}
+
+export class KeyupAction implements PreoccupyAction {
+    public type:string = ActionsName.KEYUP;
     constructor(public payload: {which: number}) {};
 }
 

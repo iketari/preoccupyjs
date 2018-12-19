@@ -20,16 +20,22 @@ export class DomController {
     }
 
     public clickTo(coordinates: Coordinates) {
-        const el = <HTMLElement>this.getElementFromPoint(this.getAbsoluteCoordinates(coordinates));
+        const absCoordinates = this.getAbsoluteCoordinates(coordinates);
+        const el = <HTMLElement>this.getElementFromPoint(absCoordinates);
 
         switch (el.tagName.toLowerCase()) {
             case 'textarea':
             case 'input':
                 this.setFocus(<HTMLTextAreaElement>el);
             default:
-                this.fireEvent('mousedown', el);
-                this.fireEvent('mouseup', el);
-                this.fireEvent('click', el);
+                const options = {
+                    clientX: absCoordinates.x,
+                    clientY: absCoordinates.y,
+                    view: window
+                };
+                this.fireEvent('mousedown', el, options);
+                this.fireEvent('mouseup', el, options);
+                this.fireEvent('click', el, options);
                 break;
         }
 
@@ -108,7 +114,7 @@ export class DomController {
         el.select();
     }
 
-    private fireEvent(type: string, el: HTMLElement): boolean {
+    private fireEvent(type: string, el: HTMLElement, options: object = {}): boolean {
         let event: Event;
 
         switch (type) {
@@ -118,7 +124,8 @@ export class DomController {
             case 'mouseup':
                 event = new MouseEvent(type, {
                     bubbles: true,
-                    cancelable: true
+                    cancelable: true,
+                    ...options
                 });
                 break;
             default:
