@@ -10,10 +10,12 @@ import { start } from '@preoccupyjs';
 })
 export class AppComponent {
   title = 'test-spa';
+  activated = false;
 
   constructor() {}
 
   onActivate() {
     start(document.documentElement);
+    this.activated = true;
   }
 }

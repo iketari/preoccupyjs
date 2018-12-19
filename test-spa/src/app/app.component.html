@@ -7,6 +7,9 @@
     <div class="panel-title h5 mt-10">PreoccupyJS</div>
     <div class="panel-subtitle">Demo App</div>
   </div>
+  <div class="panel-footer">
+    <button [ngClass]="{'btn-success': activated}" [disabled]="activated" class="btn" (click)="onActivate()">Activate remote control</button>
+  </div>
   <div class="panel-nav">
     <ul class="tab tab-block">
       <li class="tab-item" routerLinkActive="active">
@@ -26,8 +29,6 @@
   <div class="panel-body">
     <router-outlet></router-outlet>
   </div>
-  <div class="panel-footer">
-    <button (click)="onActivate()">Activate remote control</button>
-  </div>
+
 </div>
 </div>

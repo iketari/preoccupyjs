@@ -733,7 +733,7 @@ module.exports = ".menu {\n    display: flex;\n    align-items: center;\n}\n\n  
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n\n<div class=\"container\">\n<div class=\"panel\">\n  <div class=\"panel-header text-center\">\n    <figure class=\"avatar avatar-xl\"><img src=\"assets/occupy_logo.png\" alt=\"Avatar\"></figure>\n    <div class=\"panel-title h5 mt-10\">PreoccupyJS</div>\n    <div class=\"panel-subtitle\">Demo App</div>\n  </div>\n  <div class=\"panel-nav\">\n    <ul class=\"tab tab-block\">\n      <li class=\"tab-item\" routerLinkActive=\"active\">\n        <a routerLink=\"/control\">Control</a>\n      </li>\n      <li class=\"tab-item\" routerLinkActive=\"active\">\n        <a routerLink=\"/form\">Form</a>\n      </li>\n      <li class=\"tab-item\" routerLinkActive=\"active\">\n        <a routerLink=\"/scroll\">Scroll</a>\n      </li>\n      <li class=\"tab-item\" routerLinkActive=\"active\">\n        <a routerLink=\"/ace\">Editor</a>\n      </li>\n    </ul>\n  </div>\n  <div class=\"panel-body\">\n    <router-outlet></router-outlet>\n  </div>\n  <div class=\"panel-footer\">\n    <button (click)=\"onActivate()\">Activate remote control</button>\n  </div>\n</div>\n</div>"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n\n<div class=\"container\">\n<div class=\"panel\">\n  <div class=\"panel-header text-center\">\n    <figure class=\"avatar avatar-xl\"><img src=\"assets/occupy_logo.png\" alt=\"Avatar\"></figure>\n    <div class=\"panel-title h5 mt-10\">PreoccupyJS</div>\n    <div class=\"panel-subtitle\">Demo App</div>\n  </div>\n  <div class=\"panel-footer\">\n    <button [ngClass]=\"{'btn-success': activated}\" [disabled]=\"activated\" class=\"btn\" (click)=\"onActivate()\">Activate remote control</button>\n  </div>\n  <div class=\"panel-nav\">\n    <ul class=\"tab tab-block\">\n      <li class=\"tab-item\" routerLinkActive=\"active\">\n        <a routerLink=\"/control\">Control</a>\n      </li>\n      <li class=\"tab-item\" routerLinkActive=\"active\">\n        <a routerLink=\"/form\">Form</a>\n      </li>\n      <li class=\"tab-item\" routerLinkActive=\"active\">\n        <a routerLink=\"/scroll\">Scroll</a>\n      </li>\n      <li class=\"tab-item\" routerLinkActive=\"active\">\n        <a routerLink=\"/ace\">Editor</a>\n      </li>\n    </ul>\n  </div>\n  <div class=\"panel-body\">\n    <router-outlet></router-outlet>\n  </div>\n\n</div>\n</div>"
 
 /***/ }),
 
@@ -756,9 +756,11 @@ __webpack_require__.r(__webpack_exports__);
 var AppComponent = /** @class */ (function () {
     function AppComponent() {
         this.title = 'test-spa';
+        this.activated = false;
     }
     AppComponent.prototype.onActivate = function () {
         Object(_preoccupyjs__WEBPACK_IMPORTED_MODULE_2__["start"])(document.documentElement);
+        this.activated = true;
     };
     AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -840,7 +842,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".pad {\n    margin: 10px 5px;\n    border: 1px dashed #888;\n    width: 100%;\n    height: calc(100vh - 300px);\n    resize: both;\n    overflow: auto;\n}\n\n.pad:focus {\n    outline: none;\n    border-width: 2px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29udHJvbC9jb250cm9sLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxpQkFBaUI7SUFDakIsd0JBQXdCO0lBQ3hCLFlBQVk7SUFDWiw0QkFBNEI7SUFDNUIsYUFBYTtJQUNiLGVBQWU7Q0FDbEI7O0FBRUQ7SUFDSSxjQUFjO0lBQ2Qsa0JBQWtCO0NBQ3JCIiwiZmlsZSI6InNyYy9hcHAvY29udHJvbC9jb250cm9sLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIucGFkIHtcbiAgICBtYXJnaW46IDEwcHggNXB4O1xuICAgIGJvcmRlcjogMXB4IGRhc2hlZCAjODg4O1xuICAgIHdpZHRoOiAxMDAlO1xuICAgIGhlaWdodDogY2FsYygxMDB2aCAtIDMwMHB4KTtcbiAgICByZXNpemU6IGJvdGg7XG4gICAgb3ZlcmZsb3c6IGF1dG87XG59XG5cbi5wYWQ6Zm9jdXMge1xuICAgIG91dGxpbmU6IG5vbmU7XG4gICAgYm9yZGVyLXdpZHRoOiAycHg7XG59Il19 */"
+module.exports = ".pad {\n    margin: 10px 5px;\n    border: 1px dashed #888;\n    width: 100%;\n    height: calc(100vh - 350px);\n    resize: both;\n    overflow: auto;\n}\n\n.pad:focus {\n    outline: none;\n    border-width: 2px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29udHJvbC9jb250cm9sLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxpQkFBaUI7SUFDakIsd0JBQXdCO0lBQ3hCLFlBQVk7SUFDWiw0QkFBNEI7SUFDNUIsYUFBYTtJQUNiLGVBQWU7Q0FDbEI7O0FBRUQ7SUFDSSxjQUFjO0lBQ2Qsa0JBQWtCO0NBQ3JCIiwiZmlsZSI6InNyYy9hcHAvY29udHJvbC9jb250cm9sLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIucGFkIHtcbiAgICBtYXJnaW46IDEwcHggNXB4O1xuICAgIGJvcmRlcjogMXB4IGRhc2hlZCAjODg4O1xuICAgIHdpZHRoOiAxMDAlO1xuICAgIGhlaWdodDogY2FsYygxMDB2aCAtIDM1MHB4KTtcbiAgICByZXNpemU6IGJvdGg7XG4gICAgb3ZlcmZsb3c6IGF1dG87XG59XG5cbi5wYWQ6Zm9jdXMge1xuICAgIG91dGxpbmU6IG5vbmU7XG4gICAgYm9yZGVyLXdpZHRoOiAycHg7XG59Il19 */"
 
 /***/ }),
 
@@ -851,7 +853,7 @@ module.exports = ".pad {\n    margin: 10px 5px;\n    border: 1px dashed #888;\n 
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div tabindex=\"1\" class=\"pad\" #pad></div>\n<button (click)=\"onConnectClick()\">Connect</button>"
+module.exports = "<div tabindex=\"1\" class=\"pad\" #pad></div>\n<button class=\"btn btn-primary\" (click)=\"onConnectClick()\">Connect</button>"
 
 /***/ }),
 
@@ -915,7 +917,7 @@ module.exports = ".result {\n    white-space: pre;\n}\n/*# sourceMappingURL=data
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h3>Form me handsomly!</h3>\n<form (submit)=\"onFormSubmit($event)\">\n  <label for=\"textField\">Form field #1</label>\n  <input name=\"textField\" id=\"textField\" type=\"text\">\n  <br>\n  <label for=\"textArea\">Form field #2</label>\n  <textarea name=\"textArea\" id=\"textArea\"></textarea>\n  <br>\n  <label for=\"checkbox\">Form field #3</label>\n  <input name=\"checkbox\" type=\"checkbox\" id=\"checkbox\"/>\n  <div>\n    <input type=\"radio\" name=\"radio\" id=\"contactChoice1\"\n     name=\"contact\" value=\"email\">\n    <label for=\"contactChoice1\">Email</label>\n\n    <input type=\"radio\" name=\"radio\" id=\"contactChoice2\"\n     name=\"contact\" value=\"phone\">\n    <label for=\"contactChoice2\">Phone</label>\n\n    <input type=\"radio\" name=\"radio\" id=\"contactChoice3\"\n     name=\"contact\" value=\"mail\">\n    <label for=\"contactChoice3\">Mail</label>\n  </div>\n  <input type=\"submit\" value=\"submit\">\n  <p>Result:</p>\n  <div class=\"result\">{{formResult}}</div>\n</form>\n"
+module.exports = "<h3>Form me handsomly!</h3>\n<form class=\"form-horizontal\" (submit)=\"onFormSubmit($event)\">\n  <div class=\"form-group\">\n    <div class=\"col-3 col-sm-12\">\n      <label class=\"form-label\" for=\"textField\">Form field #1</label>\n    </div>\n    <div class=\"col-3 col-sm-12\">\n      <input class=\"form-input\" name=\"textField\" id=\"textField\" type=\"text\">\n    </div>\n  </div>\n  <div class=\"form-group\">\n    <div class=\"col-3 col-sm-12\">\n      <label class=\"form-label\" for=\"textArea\">Form field #2</label>\n    </div>\n    <div class=\"col-3 col-sm-12\">\n      <textarea class=\"form-input\" name=\"textArea\" id=\"textArea\"></textarea>\n    </div>\n  </div>\n  <div class=\"form-group\">\n    <div class=\"col-3 col-sm-12\">\n      <label for=\"checkbox\">Form field #3</label>\n    </div>\n    <div class=\"col-3 col-sm-12\">\n      <input name=\"checkbox\" type=\"checkbox\" id=\"checkbox\"/>\n    </div>\n  </div>\n  <div class=\"form-group\">\n    <div class=\"col-3 col-sm-12\">\n      <label class=\"form-label\">Type</label>\n    </div>\n    <div class=\"col-9 col-sm-12\">\n      <label class=\"form-radio\">\n        <input value=\"Email\" type=\"radio\" name=\"radio\"><i class=\"form-icon\"></i> Email\n      </label>\n      <label class=\"form-radio\">\n        <input value=\"Phone\" type=\"radio\" name=\"radio\"><i class=\"form-icon\"></i> Phone\n      </label>\n    </div>\n  </div>\n\n  <input class=\"btn btn-primary\" type=\"submit\" value=\"submit\">\n  <p>Result:</p>\n  <div class=\"result\">{{formResult}}</div>\n</form>\n"
 
 /***/ }),
 

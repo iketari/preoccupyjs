@@ -1,27 +1,44 @@
 <h3>Form me handsomly!</h3>
-<form (submit)="onFormSubmit($event)">
-  <label for="textField">Form field #1</label>
-  <input name="textField" id="textField" type="text">
-  <br>
-  <label for="textArea">Form field #2</label>
-  <textarea name="textArea" id="textArea"></textarea>
-  <br>
-  <label for="checkbox">Form field #3</label>
-  <input name="checkbox" type="checkbox" id="checkbox"/>
-  <div>
-    <input type="radio" name="radio" id="contactChoice1"
-     name="contact" value="email">
-    <label for="contactChoice1">Email</label>
-
-    <input type="radio" name="radio" id="contactChoice2"
-     name="contact" value="phone">
-    <label for="contactChoice2">Phone</label>
-
-    <input type="radio" name="radio" id="contactChoice3"
-     name="contact" value="mail">
-    <label for="contactChoice3">Mail</label>
+<form class="form-horizontal" (submit)="onFormSubmit($event)">
+  <div class="form-group">
+    <div class="col-3 col-sm-12">
+      <label class="form-label" for="textField">Form field #1</label>
+    </div>
+    <div class="col-3 col-sm-12">
+      <input class="form-input" name="textField" id="textField" type="text">
+    </div>
   </div>
-  <input type="submit" value="submit">
+  <div class="form-group">
+    <div class="col-3 col-sm-12">
+      <label class="form-label" for="textArea">Form field #2</label>
+    </div>
+    <div class="col-3 col-sm-12">
+      <textarea class="form-input" name="textArea" id="textArea"></textarea>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-3 col-sm-12">
+      <label for="checkbox">Form field #3</label>
+    </div>
+    <div class="col-3 col-sm-12">
+      <input name="checkbox" type="checkbox" id="checkbox"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-3 col-sm-12">
+      <label class="form-label">Type</label>
+    </div>
+    <div class="col-9 col-sm-12">
+      <label class="form-radio">
+        <input value="Email" type="radio" name="radio"><i class="form-icon"></i> Email
+      </label>
+      <label class="form-radio">
+        <input value="Phone" type="radio" name="radio"><i class="form-icon"></i> Phone
+      </label>
+    </div>
+  </div>
+
+  <input class="btn btn-primary" type="submit" value="submit">
   <p>Result:</p>
   <div class="result">{{formResult}}</div>
 </form>
