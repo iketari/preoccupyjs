@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { start } from '@preoccupyjs';
+import { createClient } from '@preoccupyjs';
 
 
 
@@ -13,7 +13,7 @@ export class AppComponent {
   activated = false;
 
   onActivate() {
-    start(document.documentElement);
+    createClient(document.documentElement);
     this.activated = true;
   }
 }

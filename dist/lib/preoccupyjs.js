@@ -4,22 +4,25 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 var client_1 = require("./client");
-var local_1 = require("./transports/local");
 var dom_1 = require("./dom");
 var host_1 = require("./host");
+var transports_1 = require("./transports");
 __export(require("./client"));
 __export(require("./host"));
-var transport = new local_1.LocalTransport();
-function start(el) {
+__export(require("./transports"));
+var localTransport = new transports_1.LocalTransport();
+function createClient(el, transport) {
+    if (transport === void 0) { transport = localTransport; }
     var client = new client_1.Client(transport, new dom_1.DomController(el));
     transport.handshake();
     return client;
 }
-exports.start = start;
-function connect(el) {
+exports.createClient = createClient;
+function createHost(el, transport) {
+    if (transport === void 0) { transport = localTransport; }
     var host = new host_1.Host(transport, el);
     transport.handshake();
     return host;
 }
-exports.connect = connect;
+exports.createHost = createHost;
 //# sourceMappingURL=preoccupyjs.js.map

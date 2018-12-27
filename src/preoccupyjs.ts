@@ -1,21 +1,22 @@
 import { Client } from './client';
-import { LocalTransport } from './transports/local';
 import { DomController } from './dom';
 import { Host } from './host';
+import { AbstractTransport, LocalTransport, RxjsTransport } from './transports';
 
 export * from './client';
 export * from './host';
+export * from './transports';
 
-const transport = new LocalTransport();
+const localTransport = new LocalTransport();
 
-export function start(el: HTMLElement): Client {
+export function createClient(el: HTMLElement, transport: AbstractTransport = localTransport): Client {
   const client = new Client(transport, new DomController(el));
   transport.handshake();
   return client;
 
 }
 
-export function connect(el: HTMLElement): Host {
+export function createHost(el: HTMLElement, transport: AbstractTransport = localTransport): Host {
   const host = new Host(transport, el);
   transport.handshake();
   return host;
