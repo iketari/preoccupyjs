@@ -14,7 +14,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "baseHref": "http://artsiom.mezin.eu/preoccupyjs/",
-            "deployUrl": "https://artsiom.mezin.eu/preoccupyjs/",
+            "deployUrl": "http://artsiom.mezin.eu/preoccupyjs/",
             "outputPath": "dist/test-spa",
             "index": "src/index.html",
             "main": "src/main.ts",
