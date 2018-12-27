@@ -23,7 +23,6 @@ An emulator of user behavioural actions for SPAs. Could be used as a part of Rem
 
 Demo: http://artsiom.mezin.eu/preoccupyjs (Open twice and read the steps above ;)
 
-
 ### Usage
 
 TBD. Have a look at an Angular Demo app in `test-spa` directory.
