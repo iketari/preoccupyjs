@@ -1,5 +1,5 @@
-import { AbstractTransport, TransportEvents, TransportEvent, Listener, Message } from './abstract';
-import { PreoccupyAction } from '../actions';
+import { PreoccupyAction } from './../actions/base';
+import { AbstractTransport, Listener, Message, TransportEvents } from './abstract';
 
 export class LocalTransport implements AbstractTransport {
 

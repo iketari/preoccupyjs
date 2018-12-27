@@ -6,12 +6,11 @@ export interface Coordinates {
 export declare class Host {
     private transport;
     private el;
+    private actions;
     constructor(transport: AbstractTransport, el: HTMLElement);
-    moveCursorTo(event: MouseEvent): void;
-    clickTo(event: MouseEvent): void;
-    dblClickTo(event: MouseEvent): void;
-    keypress(which: number): void;
-    wheel(event: WheelEvent): void;
     private initEvents;
-    private getRelativeCoordinate;
+    getRelativeCoordinate(event: MouseEvent): {
+        x: number;
+        y: number;
+    };
 }

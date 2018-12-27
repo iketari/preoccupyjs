@@ -1,3 +1,222 @@
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+
+var ActionsName;
+(function (ActionsName) {
+    ActionsName["BASE"] = "[Action] Base";
+    ActionsName["MOVE_TO"] = "[Action] Move To";
+    ActionsName["CLICK_TO"] = "[Action] Click To";
+    ActionsName["DBL_CLICK_TO"] = "[Action] Double Click To";
+    ActionsName["KEYPRESS"] = "[Action] Keypress";
+    ActionsName["KEYDOWN"] = "[Action] Keydown";
+    ActionsName["KEYUP"] = "[Action] Keyup";
+    ActionsName["SCROLL_BY"] = "[Action] Scroll By";
+})(ActionsName || (ActionsName = {}));
+var BaseAction = /** @class */ (function () {
+    function BaseAction(payload) {
+        if (payload === void 0) { payload = {}; }
+        this.payload = payload;
+        this.type = BaseAction.type;
+    }
+    BaseAction.handleEvent = function (host, event) {
+        console.warn("You have to implement a static method handleEvent for " + this.type + " action");
+        return {};
+    };
+    BaseAction.type = ActionsName.BASE;
+    return BaseAction;
+}());
+
+var MoveToAction = /** @class */ (function (_super) {
+    __extends(MoveToAction, _super);
+    function MoveToAction(payload) {
+        var _this = _super.call(this) || this;
+        _this.payload = payload;
+        _this.type = MoveToAction.type;
+        return _this;
+    }
+    MoveToAction.prototype.performEvent = function (dom, stack) {
+        dom.moveCursorTo(this.payload);
+    };
+    MoveToAction.handleEvent = function (host, event) {
+        var payload = host.getRelativeCoordinate(event);
+        return new MoveToAction(payload);
+    };
+    MoveToAction.type = ActionsName.MOVE_TO;
+    MoveToAction.eventName = 'mousemove';
+    return MoveToAction;
+}(BaseAction));
+
+var ClickToAction = /** @class */ (function (_super) {
+    __extends(ClickToAction, _super);
+    function ClickToAction(payload) {
+        var _this = _super.call(this) || this;
+        _this.payload = payload;
+        _this.type = ClickToAction.type;
+        return _this;
+    }
+    ClickToAction.prototype.performEvent = function (dom, stack) {
+        dom.clickTo(this.payload);
+    };
+    ClickToAction.handleEvent = function (host, event) {
+        var payload = host.getRelativeCoordinate(event);
+        return new ClickToAction(payload);
+    };
+    ClickToAction.type = ActionsName.CLICK_TO;
+    ClickToAction.eventName = 'click';
+    return ClickToAction;
+}(BaseAction));
+
+var KeypressAction = /** @class */ (function (_super) {
+    __extends(KeypressAction, _super);
+    function KeypressAction(payload) {
+        var _this = _super.call(this) || this;
+        _this.payload = payload;
+        _this.type = KeypressAction.type;
+        return _this;
+    }
+    KeypressAction.prototype.performEvent = function (dom, stack) {
+        dom.keypress(this.payload);
+    };
+    KeypressAction.handleEvent = function (host, event) {
+        return new KeypressAction({
+            which: event.which
+        });
+    };
+    KeypressAction.type = ActionsName.KEYPRESS;
+    KeypressAction.eventName = 'keypress';
+    return KeypressAction;
+}(BaseAction));
+
+var ScrollByAction = /** @class */ (function (_super) {
+    __extends(ScrollByAction, _super);
+    function ScrollByAction(payload) {
+        var _this = _super.call(this) || this;
+        _this.payload = payload;
+        _this.type = ScrollByAction.type;
+        return _this;
+    }
+    ScrollByAction.prototype.performEvent = function (dom, stack) {
+        dom.scroll(this.payload);
+    };
+    ScrollByAction.handleEvent = function (host, event) {
+        var coordinates = host.getRelativeCoordinate(event);
+        return new ScrollByAction(__assign({}, coordinates, { deltaX: event.deltaX, deltaY: event.deltaY }));
+    };
+    ScrollByAction.type = ActionsName.SCROLL_BY;
+    ScrollByAction.eventName = 'mousewheel';
+    return ScrollByAction;
+}(BaseAction));
+
+var DblClickToAction = /** @class */ (function (_super) {
+    __extends(DblClickToAction, _super);
+    function DblClickToAction(payload) {
+        var _this = _super.call(this) || this;
+        _this.payload = payload;
+        _this.type = DblClickToAction.type;
+        return _this;
+    }
+    DblClickToAction.prototype.performEvent = function (dom, stack) {
+        dom.dblClickTo(this.payload);
+    };
+    DblClickToAction.handleEvent = function (host, event) {
+        var payload = host.getRelativeCoordinate(event);
+        return new DblClickToAction(payload);
+    };
+    DblClickToAction.type = ActionsName.DBL_CLICK_TO;
+    DblClickToAction.eventName = 'dblclick';
+    return DblClickToAction;
+}(BaseAction));
+
+var KeydownAction = /** @class */ (function (_super) {
+    __extends(KeydownAction, _super);
+    function KeydownAction(payload) {
+        var _this = _super.call(this) || this;
+        _this.payload = payload;
+        _this.type = KeydownAction.type;
+        return _this;
+    }
+    KeydownAction.prototype.performEvent = function (dom, stack) {
+        // TBI
+    };
+    KeydownAction.handleEvent = function (host, event) {
+        return new KeydownAction({
+            which: event.which
+        });
+    };
+    KeydownAction.type = ActionsName.KEYDOWN;
+    KeydownAction.eventName = 'keydown';
+    return KeydownAction;
+}(BaseAction));
+
+var KeyupAction = /** @class */ (function (_super) {
+    __extends(KeyupAction, _super);
+    function KeyupAction(payload) {
+        var _this = _super.call(this) || this;
+        _this.payload = payload;
+        _this.type = KeyupAction.type;
+        return _this;
+    }
+    KeyupAction.prototype.performEvent = function (dom, stack) {
+        // dom.k
+    };
+    KeyupAction.handleEvent = function (host, event) {
+        return new KeyupAction({
+            which: event.which
+        });
+    };
+    KeyupAction.type = ActionsName.KEYUP;
+    KeyupAction.eventName = 'keyup';
+    return KeyupAction;
+}(BaseAction));
+
+var actionMap = new Map([
+    [MoveToAction.type, MoveToAction],
+    [ClickToAction.type, ClickToAction],
+    [KeydownAction.type, KeydownAction],
+    [KeypressAction.type, KeypressAction],
+    [KeyupAction.type, KeyupAction],
+    [MoveToAction.type, MoveToAction],
+    [ScrollByAction.type, ScrollByAction],
+    [DblClickToAction.type, DblClickToAction]
+]);
+
 var TransportEvents;
 (function (TransportEvents) {
     TransportEvents[TransportEvents["connect"] = 0] = "connect";
@@ -85,87 +304,30 @@ var LocalTransport = /** @class */ (function () {
     return LocalTransport;
 }());
 
-var ActionsName;
-(function (ActionsName) {
-    ActionsName["MOVE_TO"] = "[Action] Move To";
-    ActionsName["CLICK_TO"] = "[Action] Click To";
-    ActionsName["DBL_CLICK_TO"] = "[Action] Double Click To";
-    ActionsName["KEYPRESS"] = "[Action] Keypress";
-    ActionsName["SCROLL_BY"] = "[Action] Scroll By";
-})(ActionsName || (ActionsName = {}));
-var MoveToAction = /** @class */ (function () {
-    function MoveToAction(payload) {
-        this.payload = payload;
-        this.type = ActionsName.MOVE_TO;
-    }
-    return MoveToAction;
-}());
-var ClickToAction = /** @class */ (function () {
-    function ClickToAction(payload) {
-        this.payload = payload;
-        this.type = ActionsName.CLICK_TO;
-    }
-    return ClickToAction;
-}());
-var KeypressAction = /** @class */ (function () {
-    function KeypressAction(payload) {
-        this.payload = payload;
-        this.type = ActionsName.KEYPRESS;
-    }
-    return KeypressAction;
-}());
-var ScrollByAction = /** @class */ (function () {
-    function ScrollByAction(payload) {
-        this.payload = payload;
-        this.type = ActionsName.SCROLL_BY;
-    }
-    return ScrollByAction;
-}());
-var DblClickToAction = /** @class */ (function () {
-    function DblClickToAction(payload) {
-        this.payload = payload;
-        this.type = ActionsName.DBL_CLICK_TO;
-    }
-    return DblClickToAction;
-}());
-
+var STACK_LENGTH = 30;
 var Client = /** @class */ (function () {
     function Client(transport, dom) {
         var _this = this;
         this.dom = dom;
+        this.actionStack = [];
+        this.actions = actionMap;
         transport.on(TransportEvents.connect, function (event) {
-            console.log('Clinet', event);
-            _this.calibrate();
             _this.dom.init();
         });
         transport.on(TransportEvents.action, function (event) {
             var message = event.detail;
-            console.log('Clinet message', message.data);
-            _this.perform(message.data); // TODO: Transport for Actions?
+            _this.perform(message.data);
         });
     }
-    Client.prototype.calibrate = function () {
-        // to implement
-    };
-    Client.prototype.perform = function (action) {
-        switch (action.type) {
-            case ActionsName.MOVE_TO:
-                this.dom.moveCursorTo(action.payload);
-                break;
-            case ActionsName.CLICK_TO:
-                this.dom.clickTo(action.payload);
-                break;
-            case ActionsName.DBL_CLICK_TO:
-                this.dom.dblClickTo(action.payload);
-                break;
-            case ActionsName.KEYPRESS:
-                this.dom.keypress(action.payload);
-                break;
-            case ActionsName.SCROLL_BY:
-                this.dom.scroll(action.payload);
-                break;
-            default:
-                break;
+    Client.prototype.perform = function (rawAction) {
+        if (this.actions.has(rawAction.type)) {
+            var Action = this.actions.get(rawAction.type);
+            var action = new Action(rawAction.payload);
+            action.performEvent(this.dom, this.actionStack);
+            this.actionStack.push(action);
+            while (this.actionStack.length > STACK_LENGTH) {
+                this.actionStack.shift();
+            }
         }
     };
     return Client;
@@ -187,15 +349,21 @@ var DomController = /** @class */ (function () {
         this.cursorEl.style.left = x + "px";
     };
     DomController.prototype.clickTo = function (coordinates) {
-        var el = this.getElementFromPoint(this.getAbsoluteCoordinates(coordinates));
+        var absCoordinates = this.getAbsoluteCoordinates(coordinates);
+        var el = this.getElementFromPoint(absCoordinates);
         switch (el.tagName.toLowerCase()) {
             case 'textarea':
             case 'input':
                 this.setFocus(el);
             default:
-                this.fireEvent('mousedown', el);
-                this.fireEvent('mouseup', el);
-                this.fireEvent('click', el);
+                var options = {
+                    clientX: absCoordinates.x,
+                    clientY: absCoordinates.y,
+                    view: window
+                };
+                this.fireEvent('mousedown', el, options);
+                this.fireEvent('mouseup', el, options);
+                this.fireEvent('click', el, options);
                 break;
         }
     };
@@ -264,17 +432,15 @@ var DomController = /** @class */ (function () {
         el.focus();
         el.select();
     };
-    DomController.prototype.fireEvent = function (type, el) {
+    DomController.prototype.fireEvent = function (type, el, options) {
+        if (options === void 0) { options = {}; }
         var event;
         switch (type) {
             case 'click':
             case 'dblclick':
             case 'mousedown':
             case 'mouseup':
-                event = new MouseEvent(type, {
-                    bubbles: true,
-                    cancelable: true
-                });
+                event = new MouseEvent(type, __assign({ bubbles: true, cancelable: true }, options));
                 break;
             default:
                 event = new Event(type, {
@@ -309,76 +475,24 @@ var DomController = /** @class */ (function () {
     return DomController;
 }());
 
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
-
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
-
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
-***************************************************************************** */
-
-var __assign = function() {
-    __assign = Object.assign || function __assign(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-
 var Host = /** @class */ (function () {
     function Host(transport, el) {
+        var _this = this;
         this.transport = transport;
         this.el = el;
+        this.actions = actionMap;
         transport.on(TransportEvents.connect, function (event) {
             console.log('HOST', event);
+            _this.initEvents();
         });
-        this.initEvents();
     }
-    Host.prototype.moveCursorTo = function (event) {
-        var coordinates = this.getRelativeCoordinate(event);
-        this.transport.publish(new MoveToAction(coordinates));
-    };
-    Host.prototype.clickTo = function (event) {
-        var coordinates = this.getRelativeCoordinate(event);
-        this.transport.publish(new ClickToAction(coordinates));
-    };
-    Host.prototype.dblClickTo = function (event) {
-        var coordinates = this.getRelativeCoordinate(event);
-        this.transport.publish(new DblClickToAction(coordinates));
-    };
-    Host.prototype.keypress = function (which) {
-        this.transport.publish(new KeypressAction({ which: which }));
-    };
-    Host.prototype.wheel = function (event) {
-        var coordinates = this.getRelativeCoordinate(event);
-        this.transport.publish(new ScrollByAction(__assign({}, coordinates, { deltaX: event.deltaX, deltaY: event.deltaY })));
-    };
     Host.prototype.initEvents = function () {
         var _this = this;
-        this.el.addEventListener('mousemove', function (event) {
-            _this.moveCursorTo(event);
-        });
-        this.el.addEventListener('click', function (event) {
-            _this.clickTo(event);
-        });
-        this.el.addEventListener('keypress', function (event) {
-            _this.keypress(event.which);
-        });
-        this.el.addEventListener('wheel', function (event) {
-            _this.wheel(event);
-        });
-        this.el.addEventListener('dblclick', function (event) {
-            _this.dblClickTo(event);
+        this.actions.forEach(function (Action) {
+            _this.el.addEventListener(Action.eventName, function (event) {
+                var action = Action.handleEvent(_this, event);
+                _this.transport.publish(action);
+            });
         });
     };
     Host.prototype.getRelativeCoordinate = function (event) {

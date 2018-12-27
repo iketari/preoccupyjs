@@ -1,54 +1,38 @@
-import { AbstractTransport, TransportEvents, Message } from './transports';
-import { ActionUnion, ActionsName, MoveToAction, ClickToAction, KeypressAction, ScrollByAction, DblClickToAction } from './actions';
+import { actionMap } from './actions';
+import { PreoccupyAction, RawPreoccupyAction } from './actions/base';
 import { DomController } from './dom';
+import { AbstractTransport, Message, TransportEvents } from './transports';
+
+const STACK_LENGTH = 30;
 
 export class Client {
+    private actionStack: PreoccupyAction[] = [];
+    private actions: Map<string, any> = actionMap;
     constructor(
         transport: AbstractTransport,
         private dom: DomController
     ) {
         transport.on(TransportEvents.connect, (event) => {
-            console.log('Clinet', event);
-            this.calibrate();
             this.dom.init();
         });
 
         transport.on(TransportEvents.action, (event) => {
             const message: Message = event.detail;
 
-            console.log('Clinet message', message.data)
-            this.perform(message.data as ActionUnion); // TODO: Transport for Actions?
+            this.perform(message.data as RawPreoccupyAction);
         });
     }
 
-    public calibrate() {
-        // to implement
-    }
+    public perform(rawAction: RawPreoccupyAction) {
+        if (this.actions.has(rawAction.type)) {
+            const Action = this.actions.get(rawAction.type);
+            const action = new Action(rawAction.payload) as PreoccupyAction;
 
-    public perform(action: ActionUnion) {
-        switch (action.type) {
-            case ActionsName.MOVE_TO:
-                this.dom.moveCursorTo((<MoveToAction>action).payload);
-                break;
-
-            case ActionsName.CLICK_TO:
-                this.dom.clickTo((<ClickToAction>action).payload);
-                break;
-
-            case ActionsName.DBL_CLICK_TO:
-                this.dom.dblClickTo((<DblClickToAction>action).payload);
-                break;
-
-            case ActionsName.KEYPRESS:
-                this.dom.keypress((<KeypressAction>action).payload);
-                break;
-
-            case ActionsName.SCROLL_BY:
-                this.dom.scroll((<ScrollByAction>action).payload);
-                break;
-
-            default:
-                break;
+            action.performEvent(this.dom, this.actionStack);
+            this.actionStack.push(action);
+            while (this.actionStack.length > STACK_LENGTH) {
+                this.actionStack.shift();
+            }
         }
     }
 

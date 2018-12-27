@@ -1,9 +1,10 @@
-import { AbstractTransport } from './transports';
-import { ActionUnion } from './actions';
+import { RawPreoccupyAction } from './actions/base';
 import { DomController } from './dom';
+import { AbstractTransport } from './transports';
 export declare class Client {
     private dom;
+    private actionStack;
+    private actions;
     constructor(transport: AbstractTransport, dom: DomController);
-    calibrate(): void;
-    perform(action: ActionUnion): void;
+    perform(rawAction: RawPreoccupyAction): void;
 }

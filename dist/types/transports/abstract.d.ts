@@ -1,4 +1,4 @@
-import { PreoccupyAction } from "../actions";
+import { PreoccupyAction } from './../actions/base';
 export declare enum TransportEvents {
     connect = 0,
     disconnect = 1,

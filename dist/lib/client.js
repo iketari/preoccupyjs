@@ -1,44 +1,31 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var transports_1 = require("./transports");
 var actions_1 = require("./actions");
+var transports_1 = require("./transports");
+var STACK_LENGTH = 30;
 var Client = /** @class */ (function () {
     function Client(transport, dom) {
         var _this = this;
         this.dom = dom;
+        this.actionStack = [];
+        this.actions = actions_1.actionMap;
         transport.on(transports_1.TransportEvents.connect, function (event) {
-            console.log('Clinet', event);
-            _this.calibrate();
             _this.dom.init();
         });
         transport.on(transports_1.TransportEvents.action, function (event) {
             var message = event.detail;
-            console.log('Clinet message', message.data);
-            _this.perform(message.data); // TODO: Transport for Actions?
+            _this.perform(message.data);
         });
     }
-    Client.prototype.calibrate = function () {
-        // to implement
-    };
-    Client.prototype.perform = function (action) {
-        switch (action.type) {
-            case actions_1.ActionsName.MOVE_TO:
-                this.dom.moveCursorTo(action.payload);
-                break;
-            case actions_1.ActionsName.CLICK_TO:
-                this.dom.clickTo(action.payload);
-                break;
-            case actions_1.ActionsName.DBL_CLICK_TO:
-                this.dom.dblClickTo(action.payload);
-                break;
-            case actions_1.ActionsName.KEYPRESS:
-                this.dom.keypress(action.payload);
-                break;
-            case actions_1.ActionsName.SCROLL_BY:
-                this.dom.scroll(action.payload);
-                break;
-            default:
-                break;
+    Client.prototype.perform = function (rawAction) {
+        if (this.actions.has(rawAction.type)) {
+            var Action = this.actions.get(rawAction.type);
+            var action = new Action(rawAction.payload);
+            action.performEvent(this.dom, this.actionStack);
+            this.actionStack.push(action);
+            while (this.actionStack.length > STACK_LENGTH) {
+                this.actionStack.shift();
+            }
         }
     };
     return Client;
