@@ -34,6 +34,11 @@ export default {
     resolve(),
 
     // Resolve source maps to the original source
-    sourceMaps()
+    sourceMaps(),
+
+    copy({
+      'src/package.json': 'dist/package.json',
+      'README.md': 'dist/README.md'
+    })
   ]
 };

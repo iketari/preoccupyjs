@@ -1,4 +1,4 @@
-import { Coordinates } from "./host";
+import { Coordinates } from './host';
 export declare class DomController {
     private el;
     private cursorEl;

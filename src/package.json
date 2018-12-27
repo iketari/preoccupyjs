@@ -1,0 +1,21 @@
+{
+  "name": "preoccupyjs",
+  "version": "0.2.0",
+  "description": "An emulator of user behavioural actions for SPAs. Could be used as a part of Remote Control functionality.",
+  "main": "preoccupyjs.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "PreoccupyJS",
+    "remote",
+    "control",
+    "DOM",
+    "API"
+  ],
+  "author": {
+    "email": "artsiom.mezin@behavox.com",
+    "name": "Artsiom Mezin"
+  },
+  "license": "ISC"
+}
