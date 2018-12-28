@@ -8,7 +8,9 @@ import { ControlComponent } from './control/control.component';
 import { ScrollComponent } from './scroll/scroll.component';
 
 import { AceEditorModule } from 'ng2-ace-editor';
+import { NgxSummernoteModule } from 'ngx-summernote';
 import { AceComponent } from './ace/ace.component';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { AceComponent } from './ace/ace.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AceEditorModule
+    HttpClientModule,
+    AceEditorModule,
+    NgxSummernoteModule
   ],
   providers: [],
   bootstrap: [AppComponent]
