@@ -1,11 +1,11 @@
 import { Coordinates } from './host';
 import { Cursor } from './cursor';
+import { DEBUG_FLAG } from './utils';
 
 const CURSOR = 1;
 
 export class DomController {
-
-  private cursor: Cursor = new Cursor;
+  private cursor: Cursor = new Cursor();
   constructor(private el: Element) {}
 
   public init() {
@@ -28,27 +28,38 @@ export class DomController {
   public clickTo(coordinates: Coordinates) {
     const absCoordinates = this.getAbsoluteCoordinates(coordinates);
     const el = <HTMLElement>this.getElementFromPoint(absCoordinates);
-
-    switch (el.tagName.toLowerCase()) {
-      case 'textarea':
-      case 'input':
-        this.setFocus(<HTMLTextAreaElement>el);
-      default:
-        const options = {
-          clientX: absCoordinates.x,
-          clientY: absCoordinates.y,
-          view: window
-        };
-        this.fireEvent('mousedown', el, options);
-        this.fireEvent('mouseup', el, options);
-        this.fireEvent('click', el, options);
-        break;
-    }
+    this.setFocus(el);
+    const options = {
+      clientX: absCoordinates.x,
+      clientY: absCoordinates.y,
+      view: window
+    };
+    this.fireEvent('mousedown', el, options);
+    this.fireEvent('mouseup', el, options);
+    this.fireEvent('click', el, options);
   }
 
   public dblClickTo(coordinates: Coordinates) {
     const el = <HTMLElement>this.getElementFromPoint(this.getAbsoluteCoordinates(coordinates));
     this.fireEvent('dblclick', el);
+  }
+
+  public keydown(payload: object): any {
+    const el = document.activeElement;
+    if (el == null) {
+      return;
+    }
+
+    this.fireEvent('keydown', <HTMLElement>el, payload);
+  }
+
+  public keyup(payload: object): any {
+    const el = document.activeElement;
+    if (el == null) {
+      return;
+    }
+
+    this.fireEvent('keyup', <HTMLElement>el, payload);
   }
 
   public keypress({ which }: { which: number }) {
@@ -57,17 +68,17 @@ export class DomController {
       return;
     }
 
+    this.fireEvent('keypress', <HTMLElement>el);
     switch (el.tagName.toLowerCase()) {
       case 'textarea':
       case 'input':
-        this.fireEvent('keydown', <HTMLTextAreaElement>el);
-        this.fireEvent('keypress', <HTMLTextAreaElement>el);
         (<HTMLTextAreaElement>el).value += String.fromCharCode(which);
-        this.fireEvent('input', <HTMLTextAreaElement>el);
-        this.fireEvent('keyup', <HTMLTextAreaElement>el);
       default:
+        (<HTMLElement>el).innerHTML += String.fromCharCode(which);
         break;
     }
+
+    this.fireEvent('input', <HTMLElement>el);
   }
 
   public scroll({
@@ -118,13 +129,18 @@ export class DomController {
     return document.elementFromPoint(x - CURSOR, y - CURSOR);
   }
 
-  private setFocus(el: HTMLTextAreaElement | HTMLInputElement) {
-    el.focus();
-    el.select();
+  private setFocus(el: HTMLElement) {
+    if (typeof el.focus === 'function') {
+      el.focus();
+    }
   }
 
   private fireEvent(type: string, el: HTMLElement, options: object = {}): boolean {
     let event: Event;
+    const defaultOptions = {
+      bubbles: true,
+      cancelable: true
+    };
 
     switch (type) {
       case 'click':
@@ -132,17 +148,28 @@ export class DomController {
       case 'mousedown':
       case 'mouseup':
         event = new MouseEvent(type, {
-          bubbles: true,
-          cancelable: true,
+          ...defaultOptions,
+          ...options
+        });
+        break;
+      case 'keypress':
+      case 'keydown':
+      case 'keyup':
+        event = new KeyboardEvent(type, {
+          ...defaultOptions,
           ...options
         });
         break;
       default:
         event = new Event(type, {
-          bubbles: true,
-          cancelable: true
+          ...defaultOptions,
+          ...options
         });
         break;
+    }
+
+    if ((<any>window)[DEBUG_FLAG]) {
+      console.log('fired', event);
     }
 
     return el.dispatchEvent(event);

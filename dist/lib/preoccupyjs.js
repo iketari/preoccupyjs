@@ -10,6 +10,8 @@ var transports_1 = require("./transports");
 __export(require("./client"));
 __export(require("./host"));
 __export(require("./transports"));
+var utils_1 = require("./utils");
+exports.DEBUG_FLAG = utils_1.DEBUG_FLAG;
 var localTransport = new transports_1.LocalTransport();
 function createClient(el, transport) {
     if (transport === void 0) { transport = localTransport; }

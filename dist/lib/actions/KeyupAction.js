@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var base_1 = require("./base");
+var utils_1 = require("../utils");
 var KeyupAction = /** @class */ (function (_super) {
     __extends(KeyupAction, _super);
     function KeyupAction(payload) {
@@ -23,12 +24,20 @@ var KeyupAction = /** @class */ (function (_super) {
         return _this;
     }
     KeyupAction.prototype.performEvent = function (dom, stack) {
-        // dom.k
+        dom.keyup(this.payload);
     };
     KeyupAction.handleEvent = function (host, event) {
-        return new KeyupAction({
-            which: event.which
-        });
+        var eventData = utils_1.pick(event, [
+            'which',
+            'key',
+            'code',
+            'ctrlKey',
+            'keyCode',
+            'metaKey',
+            'shiftKey',
+            'type'
+        ]);
+        return new KeyupAction(eventData);
     };
     KeyupAction.type = base_1.ActionsName.KEYUP;
     KeyupAction.eventName = 'keyup';

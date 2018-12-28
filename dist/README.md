@@ -5,11 +5,9 @@
 </p>
 
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![Greenkeeper badge](https://badges.greenkeeper.io/iketari/preoccupyjs.svg)](https://greenkeeper.io/)
 [![Travis](https://img.shields.io/travis/iketari/preoccupyjs.svg)](https://travis-ci.org/iketari/preoccupyjs)
 [![Coveralls](https://img.shields.io/coveralls/iketari/preoccupyjs.svg)](https://coveralls.io/github/iketari/preoccupyjs)
 [![Dev Dependencies](https://david-dm.org/iketari/preoccupyjs/dev-status.svg)](https://david-dm.org/iketari/preoccupyjs?type=dev)
-[![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://paypal.me/AJoverMorales)
 
 An emulator of user behavioural actions for SPAs. Could be used as a part of Remote Control functionality.
 

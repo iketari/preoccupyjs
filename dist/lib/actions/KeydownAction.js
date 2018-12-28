@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var base_1 = require("./base");
+var utils_1 = require("../utils");
 var KeydownAction = /** @class */ (function (_super) {
     __extends(KeydownAction, _super);
     function KeydownAction(payload) {
@@ -23,12 +24,20 @@ var KeydownAction = /** @class */ (function (_super) {
         return _this;
     }
     KeydownAction.prototype.performEvent = function (dom, stack) {
-        // TBI
+        dom.keydown(this.payload);
     };
     KeydownAction.handleEvent = function (host, event) {
-        return new KeydownAction({
-            which: event.which
-        });
+        var eventData = utils_1.pick(event, [
+            'which',
+            'key',
+            'code',
+            'ctrlKey',
+            'keyCode',
+            'metaKey',
+            'shiftKey',
+            'type'
+        ]);
+        return new KeydownAction(eventData);
     };
     KeydownAction.type = base_1.ActionsName.KEYDOWN;
     KeydownAction.eventName = 'keydown';

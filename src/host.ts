@@ -16,7 +16,6 @@ export class Host {
   private actions: Map<string, any> = actionMap;
   constructor(private transport: AbstractTransport, private el: HTMLElement) {
     transport.on(TransportEvents.connect, event => {
-      console.log('HOST', event);
       this.initEvents();
     });
   }

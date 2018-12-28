@@ -9,7 +9,6 @@ var Host = /** @class */ (function () {
         this.el = el;
         this.actions = actions_1.actionMap;
         transport.on(transports_1.TransportEvents.connect, function (event) {
-            console.log('HOST', event);
             _this.initEvents();
         });
     }
