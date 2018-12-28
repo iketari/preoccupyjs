@@ -3,9 +3,6 @@
   "version": "0.1.0",
   "description": "",
   "keywords": [],
-  "main": "dist/preoccupyjs.umd.js",
-  "module": "dist/preoccupyjs.es5.js",
-  "typings": "dist/types/preoccupyjs.d.ts",
   "files": [
     "dist"
   ],
