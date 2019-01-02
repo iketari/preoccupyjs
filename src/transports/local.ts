@@ -39,10 +39,32 @@ export class LocalTransport implements AbstractTransport {
         }
     };
 
+    public handleEvent(event: Event) {
+        switch (event.type) {
+            case 'storage':
+                this.onStorageMessage(<StorageEvent>event);
+                break;
+
+            default:
+                break;
+        }
+
+    }
+
     private connect() {
-        window.addEventListener('storage', (event) => this.onStorageMessage(event));
+        this.cleanUp();
+        window.removeEventListener('storage', this);
+        window.addEventListener('storage', this);
         this.connected = true;
         this.trigger(TransportEvents.connect);
+    }
+
+    private cleanUp() {
+        Object.keys(localStorage).forEach((key) => {
+            if (key.startsWith(this.preifx)) {
+                localStorage.removeItem(key);
+            }
+         });
     }
 
     private onStorageMessage({key, newValue}: StorageEvent) {

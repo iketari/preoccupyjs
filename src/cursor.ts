@@ -19,7 +19,7 @@ export class Cursor {
         const el = document.createElement('div');
         css(el, <Partial<CSSStyleDeclaration>>{
             'z-index': '100500',
-            position: 'absolute',
+            position: 'fixed',
             top: '0',
             left: '0',
             width: '30px',

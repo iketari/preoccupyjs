@@ -306,11 +306,29 @@ var LocalTransport = /** @class */ (function () {
             }
         }
     };
+    LocalTransport.prototype.handleEvent = function (event) {
+        switch (event.type) {
+            case 'storage':
+                this.onStorageMessage(event);
+                break;
+            default:
+                break;
+        }
+    };
     LocalTransport.prototype.connect = function () {
-        var _this = this;
-        window.addEventListener('storage', function (event) { return _this.onStorageMessage(event); });
+        this.cleanUp();
+        window.removeEventListener('storage', this);
+        window.addEventListener('storage', this);
         this.connected = true;
         this.trigger(TransportEvents.connect);
+    };
+    LocalTransport.prototype.cleanUp = function () {
+        var _this = this;
+        Object.keys(localStorage).forEach(function (key) {
+            if (key.startsWith(_this.preifx)) {
+                localStorage.removeItem(key);
+            }
+        });
     };
     LocalTransport.prototype.onStorageMessage = function (_a) {
         var key = _a.key, newValue = _a.newValue;
@@ -5639,7 +5657,7 @@ var Cursor = /** @class */ (function () {
         var el = document.createElement('div');
         css(el, {
             'z-index': '100500',
-            position: 'absolute',
+            position: 'fixed',
             top: '0',
             left: '0',
             width: '30px',
@@ -5675,7 +5693,11 @@ var DomController = /** @class */ (function () {
     DomController.prototype.clickTo = function (coordinates) {
         var absCoordinates = this.getAbsoluteCoordinates(coordinates);
         var el = this.getElementFromPoint(absCoordinates);
+        if (document.activeElement != null) {
+            this.fireEvent('blur', document.activeElement);
+        }
         this.setFocus(el);
+        this.fireEvent('focus', el);
         var options = {
             clientX: absCoordinates.x,
             clientY: absCoordinates.y,
@@ -5725,28 +5747,29 @@ var DomController = /** @class */ (function () {
         var initialEl = this.getElementFromPoint(this.getAbsoluteCoordinates({ x: x, y: y }));
         var scrollableEl;
         var el = initialEl;
-        while (el.parentElement) {
+        while (el && el.parentElement) {
             if (this.isScrollable(el)) {
                 scrollableEl = el;
                 break;
             }
             el = el.parentElement;
         }
-        if (scrollableEl) {
-            scrollableEl.scrollBy({
-                left: deltaX,
-                top: deltaY
-            });
+        if (!scrollableEl) {
+            scrollableEl = document.body;
         }
+        scrollableEl.scrollBy({
+            left: deltaX,
+            top: deltaY
+        });
         this.fireEvent('wheel', el);
         this.fireEvent('scroll', el);
     };
     DomController.prototype.getAbsoluteCoordinates = function (_a) {
         var x = _a.x, y = _a.y;
-        var _b = this.el, clientHeight = _b.clientHeight, clientWidth = _b.clientWidth;
+        var innerHeight = window.innerHeight, innerWidth = window.innerWidth;
         return {
-            x: x * clientWidth,
-            y: y * clientHeight
+            x: x * innerWidth,
+            y: y * innerHeight
         };
     };
     DomController.prototype.getElementFromPoint = function (_a) {
@@ -5787,7 +5810,15 @@ var DomController = /** @class */ (function () {
         return el.dispatchEvent(event);
     };
     DomController.prototype.isScrollable = function (el) {
-        return el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight;
+        return this.isScrollableY(el) || this.isScrollableX(el);
+    };
+    DomController.prototype.isScrollableX = function (el) {
+        var style = getComputedStyle(el);
+        return ['auto', 'scroll'].includes(style.overflowX) && el.scrollWidth > el.clientWidth;
+    };
+    DomController.prototype.isScrollableY = function (el) {
+        var style = getComputedStyle(el);
+        return ['auto', 'scroll'].includes(style.overflowY) && el.scrollHeight > el.clientHeight;
     };
     return DomController;
 }());

@@ -16,7 +16,7 @@ var Cursor = /** @class */ (function () {
         var el = document.createElement('div');
         utils_1.css(el, {
             'z-index': '100500',
-            position: 'absolute',
+            position: 'fixed',
             top: '0',
             left: '0',
             width: '30px',

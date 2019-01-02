@@ -39,11 +39,29 @@ var LocalTransport = /** @class */ (function () {
         }
     };
     ;
+    LocalTransport.prototype.handleEvent = function (event) {
+        switch (event.type) {
+            case 'storage':
+                this.onStorageMessage(event);
+                break;
+            default:
+                break;
+        }
+    };
     LocalTransport.prototype.connect = function () {
-        var _this = this;
-        window.addEventListener('storage', function (event) { return _this.onStorageMessage(event); });
+        this.cleanUp();
+        window.removeEventListener('storage', this);
+        window.addEventListener('storage', this);
         this.connected = true;
         this.trigger(abstract_1.TransportEvents.connect);
+    };
+    LocalTransport.prototype.cleanUp = function () {
+        var _this = this;
+        Object.keys(localStorage).forEach(function (key) {
+            if (key.startsWith(_this.preifx)) {
+                localStorage.removeItem(key);
+            }
+        });
     };
     LocalTransport.prototype.onStorageMessage = function (_a) {
         var key = _a.key, newValue = _a.newValue;

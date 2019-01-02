@@ -23,4 +23,6 @@ export declare class DomController {
     private setFocus;
     private fireEvent;
     private isScrollable;
+    private isScrollableX;
+    private isScrollableY;
 }

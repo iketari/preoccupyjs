@@ -28,7 +28,11 @@ export class DomController {
   public clickTo(coordinates: Coordinates) {
     const absCoordinates = this.getAbsoluteCoordinates(coordinates);
     const el = <HTMLElement>this.getElementFromPoint(absCoordinates);
+    if (document.activeElement != null) {
+      this.fireEvent('blur', <HTMLElement>document.activeElement);
+    }
     this.setFocus(el);
+    this.fireEvent('focus', el);
     const options = {
       clientX: absCoordinates.x,
       clientY: absCoordinates.y,
@@ -96,7 +100,7 @@ export class DomController {
     let scrollableEl: HTMLElement | undefined;
     let el = initialEl;
 
-    while (el.parentElement) {
+    while (el && el.parentElement) {
       if (this.isScrollable(el)) {
         scrollableEl = el;
         break;
@@ -105,23 +109,25 @@ export class DomController {
       el = el.parentElement;
     }
 
-    if (scrollableEl) {
-      scrollableEl.scrollBy({
-        left: deltaX,
-        top: deltaY
-      });
+    if (!scrollableEl) {
+      scrollableEl = document.body;
     }
+
+    scrollableEl.scrollBy({
+      left: deltaX,
+      top: deltaY
+    });
 
     this.fireEvent('wheel', el);
     this.fireEvent('scroll', el);
   }
 
   private getAbsoluteCoordinates({ x, y }: Coordinates): Coordinates {
-    const { clientHeight, clientWidth } = this.el as HTMLBodyElement;
+    const { innerHeight, innerWidth } = window;
 
     return {
-      x: x * clientWidth,
-      y: y * clientHeight
+      x: x * innerWidth,
+      y: y * innerHeight
     };
   }
 
@@ -176,6 +182,16 @@ export class DomController {
   }
 
   private isScrollable(el: HTMLElement) {
-    return el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight;
+    return this.isScrollableY(el) || this.isScrollableX(el);
+  }
+
+  private isScrollableX(el: HTMLElement) {
+    const style = getComputedStyle(el);
+    return ['auto', 'scroll'].includes(<string>style.overflowX) && el.scrollWidth > el.clientWidth;
+  }
+
+  private isScrollableY(el: HTMLElement) {
+    const style = getComputedStyle(el);
+    return ['auto', 'scroll'].includes(<string>style.overflowY) && el.scrollHeight > el.clientHeight;
   }
 }

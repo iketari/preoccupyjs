@@ -11,7 +11,9 @@ export declare class LocalTransport implements AbstractTransport {
     handshake(): void;
     on(eventName: TransportEvents, callback: Listener): void;
     publish(action: PreoccupyAction): void;
+    handleEvent(event: Event): void;
     private connect;
+    private cleanUp;
     private onStorageMessage;
     private trigger;
     private isExternalMessage;

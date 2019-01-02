@@ -6,6 +6,7 @@
   "files": [
     "dist"
   ],
+  "main": "src/preoccupyjs.ts",
   "author": "Artsiom Mezin <artsiom.mezin@behavox.com>",
   "repository": {
     "type": "git",

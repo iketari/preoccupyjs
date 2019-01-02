@@ -6,7 +6,7 @@ import typescript from 'rollup-plugin-typescript2';
 import json from 'rollup-plugin-json';
 import copy from 'rollup-plugin-copy';
 
-const pkg = require('./package.json');
+const pkg = require('./src/package.json');
 
 const libraryName = 'preoccupyjs';
 
