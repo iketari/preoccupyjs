@@ -7,7 +7,7 @@ export declare class DomController {
     moveCursorTo(coordinates: Coordinates): void;
     clickTo(coordinates: Coordinates): void;
     dblClickTo(coordinates: Coordinates): void;
-    keydown(payload: object): any;
+    keydown(payload: Partial<KeyboardEvent>): any;
     keyup(payload: object): any;
     keypress({ which }: {
         which: number;

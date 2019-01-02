@@ -52,12 +52,31 @@ var DomController = /** @class */ (function () {
     };
     DomController.prototype.dblClickTo = function (coordinates) {
         var el = this.getElementFromPoint(this.getAbsoluteCoordinates(coordinates));
+        switch (el.tagName.toLowerCase()) {
+            case 'textarea':
+            case 'input':
+                el.select();
+            default:
+                break;
+        }
         this.fireEvent('dblclick', el);
     };
     DomController.prototype.keydown = function (payload) {
         var el = document.activeElement;
         if (el == null) {
             return;
+        }
+        if (payload.which === 8) {
+            switch (el.tagName.toLowerCase()) {
+                case 'textarea':
+                case 'input':
+                    el.value = el.value.slice(0, -1);
+                default:
+                    if (el.isContentEditable) {
+                        el.innerHTML = el.innerHTML.slice(0, -1);
+                    }
+                    break;
+            }
         }
         this.fireEvent('keydown', el, payload);
     };

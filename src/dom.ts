@@ -45,13 +45,33 @@ export class DomController {
 
   public dblClickTo(coordinates: Coordinates) {
     const el = <HTMLElement>this.getElementFromPoint(this.getAbsoluteCoordinates(coordinates));
+    switch (el.tagName.toLowerCase()) {
+      case 'textarea':
+      case 'input':
+        (<HTMLInputElement>el).select();
+      default:
+        break;
+    }
     this.fireEvent('dblclick', el);
   }
 
-  public keydown(payload: object): any {
+  public keydown(payload: Partial<KeyboardEvent>): any {
     const el = document.activeElement;
     if (el == null) {
       return;
+    }
+
+    if (payload.which === 8) {
+      switch (el.tagName.toLowerCase()) {
+        case 'textarea':
+        case 'input':
+          (<HTMLTextAreaElement>el).value = (<HTMLTextAreaElement>el).value.slice(0, -1);
+        default:
+          if ((<HTMLElement>el).isContentEditable) {
+            el.innerHTML = el.innerHTML.slice(0, -1);
+          }
+          break;
+      }
     }
 
     this.fireEvent('keydown', <HTMLElement>el, payload);
@@ -192,6 +212,8 @@ export class DomController {
 
   private isScrollableY(el: HTMLElement) {
     const style = getComputedStyle(el);
-    return ['auto', 'scroll'].includes(<string>style.overflowY) && el.scrollHeight > el.clientHeight;
+    return (
+      ['auto', 'scroll'].includes(<string>style.overflowY) && el.scrollHeight > el.clientHeight
+    );
   }
 }

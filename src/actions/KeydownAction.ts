@@ -5,7 +5,7 @@ import { pick } from '../utils';
 export class KeydownAction extends BaseAction implements PreoccupyAction {
   static type: string = ActionsName.KEYDOWN;
   static eventName: string = 'keydown';
-  constructor(public payload: object) {
+  constructor(public payload: Partial<KeyboardEvent>) {
     super();
     this.type = KeydownAction.type;
   }
