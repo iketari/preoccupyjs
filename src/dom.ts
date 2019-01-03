@@ -11,7 +11,7 @@ export class DomController {
   public init() {
     this.cursor.moveTo({ x: 0, y: 0 });
 
-    const bodyEl = <HTMLBodyElement>this.el.querySelector('body');
+    const bodyEl = this.el.querySelector('body') as HTMLBodyElement;
     if (getComputedStyle(this.el).position !== 'static') {
       this.el.appendChild(this.cursor.getEl());
     } else {
@@ -61,8 +61,8 @@ export class DomController {
 
     const [el, options] = payload;
 
-    if (document.activeElement != null) {
-      this.fireEvent('blur', <HTMLElement>document.activeElement);
+    if (document.activeElement !== null) {
+      this.fireEvent('blur', document.activeElement as HTMLElement);
     }
 
     this.setFocus(el);
@@ -81,11 +81,12 @@ export class DomController {
   }
 
   public dblClickTo(coordinates: Coordinates) {
-    const el = <HTMLElement>this.getElementFromPoint(this.getAbsoluteCoordinates(coordinates));
+    const el = this.getElementFromPoint(this.getAbsoluteCoordinates(coordinates)) as HTMLElement;
     switch (el.tagName.toLowerCase()) {
       case 'textarea':
       case 'input':
-        (<HTMLInputElement>el).select();
+        (el as HTMLInputElement).select();
+        break;
       default:
         break;
     }
@@ -94,52 +95,58 @@ export class DomController {
 
   public keydown(payload: Partial<KeyboardEvent>): any {
     const el = document.activeElement;
-    if (el == null) {
+    if (!el) {
       return;
     }
 
-    if (payload.which === 8) {
+    if (payload.code === 'Backspace') {
       switch (el.tagName.toLowerCase()) {
         case 'textarea':
         case 'input':
-          (<HTMLTextAreaElement>el).value = (<HTMLTextAreaElement>el).value.slice(0, -1);
+          const inputEl = el as HTMLInputElement;
+          if (['checkbox', 'radio'].includes(inputEl.type)) {
+            break;
+          }
+          inputEl.value = (el as HTMLTextAreaElement).value.slice(0, -1);
+          break;
         default:
-          if ((<HTMLElement>el).isContentEditable) {
+          if ((el as HTMLElement).isContentEditable) {
             el.innerHTML = el.innerHTML.slice(0, -1);
           }
           break;
       }
     }
 
-    this.fireEvent('keydown', <HTMLElement>el, payload);
+    this.fireEvent('keydown', el as HTMLElement, payload);
   }
 
   public keyup(payload: object): any {
     const el = document.activeElement;
-    if (el == null) {
+    if (!el) {
       return;
     }
 
-    this.fireEvent('keyup', <HTMLElement>el, payload);
+    this.fireEvent('keyup', el as HTMLElement, payload);
   }
 
-  public keypress({ which }: { which: number }) {
-    const el = document.activeElement;
-    if (el == null) {
+  public keypress(event: Partial<KeyboardEvent>) {
+    const el = document.activeElement as HTMLElement;
+    if (!el || event.keyCode === undefined) {
       return;
     }
 
-    this.fireEvent('keypress', <HTMLElement>el);
+    this.fireEvent('keypress', el, event);
     switch (el.tagName.toLowerCase()) {
       case 'textarea':
       case 'input':
-        (<HTMLTextAreaElement>el).value += String.fromCharCode(which);
+        (el as HTMLTextAreaElement).value += String.fromCharCode(event.keyCode);
+        break;
       default:
-        (<HTMLElement>el).innerHTML += String.fromCharCode(which);
+        el.innerHTML += String.fromCharCode(event.keyCode);
         break;
     }
 
-    this.fireEvent('input', <HTMLElement>el);
+    this.fireEvent('input', el, event);
   }
 
   public scroll({
@@ -153,7 +160,7 @@ export class DomController {
     deltaX: number;
     deltaY: number;
   }) {
-    let initialEl = <HTMLElement>this.getElementFromPoint(this.getAbsoluteCoordinates({ x, y }));
+    let initialEl = this.getElementFromPoint(this.getAbsoluteCoordinates({ x, y })) as HTMLElement;
     let scrollableEl: HTMLElement | undefined;
     let el = initialEl;
 
@@ -183,7 +190,7 @@ export class DomController {
     coordinates: Coordinates
   ): [HTMLElement, Partial<MouseEvent>] | null {
     const absCoordinates = this.getAbsoluteCoordinates(coordinates);
-    const el = <HTMLElement>this.getElementFromPoint(absCoordinates);
+    const el = this.getElementFromPoint(absCoordinates) as HTMLElement;
 
     if (!el) {
       return null;
@@ -212,7 +219,7 @@ export class DomController {
   }
 
   private setFocus(el: HTMLElement) {
-    if (typeof el.focus === 'function') {
+    if (el.focus) {
       el.focus();
     }
   }
@@ -252,7 +259,7 @@ export class DomController {
         break;
     }
 
-    if ((<any>window)[DEBUG_FLAG]) {
+    if ((window as any)[DEBUG_FLAG]) {
       console.log('fired', event);
     }
 
@@ -265,13 +272,15 @@ export class DomController {
 
   private isScrollableX(el: HTMLElement) {
     const style = getComputedStyle(el);
-    return ['auto', 'scroll'].includes(<string>style.overflowX) && el.scrollWidth > el.clientWidth;
+    return (
+      ['auto', 'scroll'].includes(style.overflowX as string) && el.scrollWidth > el.clientWidth
+    );
   }
 
   private isScrollableY(el: HTMLElement) {
     const style = getComputedStyle(el);
     return (
-      ['auto', 'scroll'].includes(<string>style.overflowY) && el.scrollHeight > el.clientHeight
+      ['auto', 'scroll'].includes(style.overflowY as string) && el.scrollHeight > el.clientHeight
     );
   }
 }

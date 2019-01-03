@@ -58,7 +58,7 @@ var DomController = /** @class */ (function () {
             return;
         }
         var el = payload[0], options = payload[1];
-        if (document.activeElement != null) {
+        if (document.activeElement !== null) {
             this.fireEvent('blur', document.activeElement);
         }
         this.setFocus(el);
@@ -78,6 +78,7 @@ var DomController = /** @class */ (function () {
             case 'textarea':
             case 'input':
                 el.select();
+                break;
             default:
                 break;
         }
@@ -85,14 +86,19 @@ var DomController = /** @class */ (function () {
     };
     DomController.prototype.keydown = function (payload) {
         var el = document.activeElement;
-        if (el == null) {
+        if (!el) {
             return;
         }
-        if (payload.which === 8) {
+        if (payload.code === 'Backspace') {
             switch (el.tagName.toLowerCase()) {
                 case 'textarea':
                 case 'input':
-                    el.value = el.value.slice(0, -1);
+                    var inputEl = el;
+                    if (['checkbox', 'radio'].includes(inputEl.type)) {
+                        break;
+                    }
+                    inputEl.value = el.value.slice(0, -1);
+                    break;
                 default:
                     if (el.isContentEditable) {
                         el.innerHTML = el.innerHTML.slice(0, -1);
@@ -104,27 +110,27 @@ var DomController = /** @class */ (function () {
     };
     DomController.prototype.keyup = function (payload) {
         var el = document.activeElement;
-        if (el == null) {
+        if (!el) {
             return;
         }
         this.fireEvent('keyup', el, payload);
     };
-    DomController.prototype.keypress = function (_a) {
-        var which = _a.which;
+    DomController.prototype.keypress = function (event) {
         var el = document.activeElement;
-        if (el == null) {
+        if (!el || event.keyCode === undefined) {
             return;
         }
-        this.fireEvent('keypress', el);
+        this.fireEvent('keypress', el, event);
         switch (el.tagName.toLowerCase()) {
             case 'textarea':
             case 'input':
-                el.value += String.fromCharCode(which);
+                el.value += String.fromCharCode(event.keyCode);
+                break;
             default:
-                el.innerHTML += String.fromCharCode(which);
+                (el).innerHTML += String.fromCharCode(event.keyCode);
                 break;
         }
-        this.fireEvent('input', el);
+        this.fireEvent('input', el, event);
     };
     DomController.prototype.scroll = function (_a) {
         var x = _a.x, y = _a.y, deltaX = _a.deltaX, deltaY = _a.deltaY;
@@ -174,7 +180,7 @@ var DomController = /** @class */ (function () {
         return document.elementFromPoint(x - CURSOR, y - CURSOR);
     };
     DomController.prototype.setFocus = function (el) {
-        if (typeof el.focus === 'function') {
+        if (el.focus) {
             el.focus();
         }
     };

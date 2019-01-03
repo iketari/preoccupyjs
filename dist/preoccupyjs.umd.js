@@ -125,7 +125,9 @@
         };
         KeypressAction.handleEvent = function (host, event) {
             return new KeypressAction({
-                which: event.which
+                key: event.key,
+                code: event.code,
+                keyCode: event.keyCode
             });
         };
         KeypressAction.type = ActionsName.KEYPRESS;
@@ -373,7 +375,7 @@
             this.storage.setItem(this.preifx + "|" + message.type + "|" + message.hash, message.serialize());
             if (this.publishedMessages.length > this.stackSize) {
                 var messageToDelete = this.publishedMessages.shift();
-                if (messageToDelete != null) {
+                if (messageToDelete) {
                     this.storage.removeItem(this.preifx + "|" + messageToDelete.type + "|" + messageToDelete.hash);
                 }
             }
@@ -413,14 +415,16 @@
         };
         LocalTransport.prototype.trigger = function (type, detail) {
             if (Array.isArray(this.listeners[type])) {
-                this.listeners[type].forEach(function (callback) { return callback({
-                    type: type,
-                    detail: detail
-                }); });
+                this.listeners[type].forEach(function (callback) {
+                    return callback({
+                        type: type,
+                        detail: detail
+                    });
+                });
             }
         };
         LocalTransport.prototype.isExternalMessage = function (message) {
-            return this.publishedMessages.find(function (ownMessage) { return ownMessage.hash === message.hash; }) == null;
+            return !this.publishedMessages.find(function (ownMessage) { return ownMessage.hash === message.hash; });
         };
         return LocalTransport;
     }());
@@ -5643,8 +5647,8 @@
             this.listeners = {};
             this.connected = false;
             this.subject = options.subject;
-            this.filterFn = options.filterFn || (function (rawData) { return rawData != null; });
-            this.wrapFn = options.wrapFn || (function (message) { return ({ data: message.serialize() }); });
+            this.filterFn = options.filterFn === undefined ? (function (rawData) { return Boolean(rawData); }) : options.filterFn;
+            this.wrapFn = options.wrapFn === undefined ? (function (message) { return ({ data: message.serialize() }); }) : options.wrapFn;
         }
         RxjsTransport.prototype.on = function (eventName, callback) {
             if (!this.listeners[eventName]) {
@@ -5666,9 +5670,7 @@
         };
         RxjsTransport.prototype.connect = function () {
             var _this = this;
-            this.subject
-                .pipe(filter(function (rawData) { return _this.filterFn(rawData); }))
-                .subscribe(function (data) {
+            this.subject.pipe(filter(function (rawData) { return _this.filterFn(rawData); })).subscribe(function (data) {
                 var message = Message.parse('|||' + data.data);
                 _this.trigger(exports.TransportEvents.action, message);
             });
@@ -5676,10 +5678,12 @@
         };
         RxjsTransport.prototype.trigger = function (type, detail) {
             if (Array.isArray(this.listeners[type])) {
-                this.listeners[type].forEach(function (callback) { return callback({
-                    type: type,
-                    detail: detail
-                }); });
+                this.listeners[type].forEach(function (callback) {
+                    return callback({
+                        type: type,
+                        detail: detail
+                    });
+                });
             }
         };
         return RxjsTransport;
@@ -5787,7 +5791,7 @@
                 return;
             }
             var el = payload[0], options = payload[1];
-            if (document.activeElement != null) {
+            if (document.activeElement !== null) {
                 this.fireEvent('blur', document.activeElement);
             }
             this.setFocus(el);
@@ -5807,6 +5811,7 @@
                 case 'textarea':
                 case 'input':
                     el.select();
+                    break;
                 default:
                     break;
             }
@@ -5814,14 +5819,19 @@
         };
         DomController.prototype.keydown = function (payload) {
             var el = document.activeElement;
-            if (el == null) {
+            if (!el) {
                 return;
             }
-            if (payload.which === 8) {
+            if (payload.code === 'Backspace') {
                 switch (el.tagName.toLowerCase()) {
                     case 'textarea':
                     case 'input':
-                        el.value = el.value.slice(0, -1);
+                        var inputEl = el;
+                        if (['checkbox', 'radio'].includes(inputEl.type)) {
+                            break;
+                        }
+                        inputEl.value = el.value.slice(0, -1);
+                        break;
                     default:
                         if (el.isContentEditable) {
                             el.innerHTML = el.innerHTML.slice(0, -1);
@@ -5833,27 +5843,27 @@
         };
         DomController.prototype.keyup = function (payload) {
             var el = document.activeElement;
-            if (el == null) {
+            if (!el) {
                 return;
             }
             this.fireEvent('keyup', el, payload);
         };
-        DomController.prototype.keypress = function (_a) {
-            var which = _a.which;
+        DomController.prototype.keypress = function (event) {
             var el = document.activeElement;
-            if (el == null) {
+            if (!el || event.keyCode === undefined) {
                 return;
             }
-            this.fireEvent('keypress', el);
+            this.fireEvent('keypress', el, event);
             switch (el.tagName.toLowerCase()) {
                 case 'textarea':
                 case 'input':
-                    el.value += String.fromCharCode(which);
+                    el.value += String.fromCharCode(event.keyCode);
+                    break;
                 default:
-                    el.innerHTML += String.fromCharCode(which);
+                    (el).innerHTML += String.fromCharCode(event.keyCode);
                     break;
             }
-            this.fireEvent('input', el);
+            this.fireEvent('input', el, event);
         };
         DomController.prototype.scroll = function (_a) {
             var x = _a.x, y = _a.y, deltaX = _a.deltaX, deltaY = _a.deltaY;
@@ -5903,7 +5913,7 @@
             return document.elementFromPoint(x - CURSOR, y - CURSOR);
         };
         DomController.prototype.setFocus = function (el) {
-            if (typeof el.focus === 'function') {
+            if (el.focus) {
                 el.focus();
             }
         };

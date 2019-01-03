@@ -27,7 +27,7 @@ export abstract class BaseAction implements PreoccupyAction {
   abstract performEvent(dom: DomController, stack: PreoccupyAction[]): void;
   static handleEvent(host: Host, event: Event): PreoccupyAction {
     console.warn(`You have to implement a static method handleEvent for ${this.type} action`);
-    return <PreoccupyAction>{};
+    return {} as PreoccupyAction;
   }
 
   constructor(public payload: object = {}) {

@@ -26,19 +26,17 @@ var LocalTransport = /** @class */ (function () {
         }
         this.listeners[eventName].push(callback);
     };
-    ;
     LocalTransport.prototype.publish = function (action) {
         var message = new abstract_1.Message('action', action);
         this.publishedMessages.push(message);
         this.storage.setItem(this.preifx + "|" + message.type + "|" + message.hash, message.serialize());
         if (this.publishedMessages.length > this.stackSize) {
             var messageToDelete = this.publishedMessages.shift();
-            if (messageToDelete != null) {
+            if (messageToDelete) {
                 this.storage.removeItem(this.preifx + "|" + messageToDelete.type + "|" + messageToDelete.hash);
             }
         }
     };
-    ;
     LocalTransport.prototype.handleEvent = function (event) {
         switch (event.type) {
             case 'storage':
@@ -74,15 +72,16 @@ var LocalTransport = /** @class */ (function () {
     };
     LocalTransport.prototype.trigger = function (type, detail) {
         if (Array.isArray(this.listeners[type])) {
-            this.listeners[type].forEach(function (callback) { return callback({
-                type: type,
-                detail: detail
-            }); });
+            this.listeners[type].forEach(function (callback) {
+                return callback({
+                    type: type,
+                    detail: detail
+                });
+            });
         }
-        ;
     };
     LocalTransport.prototype.isExternalMessage = function (message) {
-        return this.publishedMessages.find(function (ownMessage) { return ownMessage.hash === message.hash; }) == null;
+        return !this.publishedMessages.find(function (ownMessage) { return ownMessage.hash === message.hash; });
     };
     return LocalTransport;
 }());

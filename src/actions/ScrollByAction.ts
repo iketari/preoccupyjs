@@ -21,7 +21,7 @@ export class ScrollByAction extends BaseAction implements PreoccupyAction {
   }
 
   static handleEvent(host: Host, event: WheelEvent): PreoccupyAction {
-    const coordinates = host.getRelativeCoordinate(<MouseEvent>event);
+    const coordinates = host.getRelativeCoordinate(event as MouseEvent);
 
     return new ScrollByAction({
       ...coordinates,

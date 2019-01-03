@@ -12,9 +12,7 @@ export declare class DomController {
     dblClickTo(coordinates: Coordinates): void;
     keydown(payload: Partial<KeyboardEvent>): any;
     keyup(payload: object): any;
-    keypress({ which }: {
-        which: number;
-    }): void;
+    keypress(event: Partial<KeyboardEvent>): void;
     scroll({ x, y, deltaX, deltaY }: {
         x: number;
         y: number;

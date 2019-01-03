@@ -22,5 +22,4 @@ var Message = /** @class */ (function () {
     return Message;
 }());
 exports.Message = Message;
-;
 //# sourceMappingURL=abstract.js.map

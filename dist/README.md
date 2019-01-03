@@ -1,4 +1,4 @@
-# PrepoccupyJS
+# PreoccupyJS
 
 <p align="center">
     <img src="http://artsiom.mezin.eu/preoccupyjs/occupy_logo.5333adb14d3b90a39995.png" alt="PrepoccupyJS's custom image"/>

@@ -18,8 +18,9 @@ export class RxjsTransport implements AbstractTransport {
 
   constructor(options: RxjsTransportOptions) {
     this.subject = options.subject;
-    this.filterFn = options.filterFn || (rawData => rawData != null);
-    this.wrapFn = options.wrapFn || (message => ({ data: message.serialize() }));
+    this.filterFn = options.filterFn === undefined ? rawData => Boolean(rawData) : options.filterFn;
+    this.wrapFn =
+      options.wrapFn === undefined ? message => ({ data: message.serialize() }) : options.wrapFn;
   }
 
   public on(eventName: TransportEvents, callback: Listener): void {

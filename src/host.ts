@@ -25,7 +25,7 @@ export class Host {
 
   public getRelativeCoordinate(event: MouseEvent): { x: number; y: number } {
     const { offsetX, offsetY } = event;
-    const { clientHeight, clientWidth } = <HTMLDivElement>event.target;
+    const { clientHeight, clientWidth } = event.target as HTMLDivElement;
 
     return {
       x: offsetX / clientWidth,

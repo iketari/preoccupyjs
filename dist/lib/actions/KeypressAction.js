@@ -27,7 +27,9 @@ var KeypressAction = /** @class */ (function (_super) {
     };
     KeypressAction.handleEvent = function (host, event) {
         return new KeypressAction({
-            which: event.which
+            key: event.key,
+            code: event.code,
+            keyCode: event.keyCode
         });
     };
     KeypressAction.type = base_1.ActionsName.KEYPRESS;
