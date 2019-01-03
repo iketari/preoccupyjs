@@ -20,49 +20,61 @@ export class DomController {
   }
 
   public moveCursorTo(coordinates: Coordinates) {
-    const absCoordinates = this.getAbsoluteCoordinates(coordinates);
+    const payload = this.getMouseEventPayload(coordinates);
 
-    this.cursor.moveTo(absCoordinates);
+    if (payload === null) {
+      return;
+    }
+
+    this.fireEvent('mousemove', ...payload);
+  }
+
+  public mouseDownTo(coordinates: Coordinates) {
+    const payload = this.getMouseEventPayload(coordinates);
+
+    if (payload === null) {
+      return;
+    }
+
+    this.fireEvent('mousedown', ...payload);
+  }
+
+  public mouseUpTo(coordinates: Coordinates) {
+    const payload = this.getMouseEventPayload(coordinates);
+
+    if (payload === null) {
+      return;
+    }
+
+    this.fireEvent('mouseup', ...payload);
   }
 
   public clickTo(coordinates: Coordinates) {
-    const absCoordinates = this.getAbsoluteCoordinates(coordinates);
-    const el = <HTMLElement>this.getElementFromPoint(absCoordinates);
+    const payload = this.getMouseEventPayload(coordinates);
 
-    if (!el) {
+    if (payload === null) {
       return;
     }
+
+    const [el, options] = payload;
 
     if (document.activeElement != null) {
       this.fireEvent('blur', <HTMLElement>document.activeElement);
     }
+
     this.setFocus(el);
     this.fireEvent('focus', el);
-    const options = {
-      clientX: absCoordinates.x,
-      clientY: absCoordinates.y,
-      view: window
-    };
-    this.fireEvent('mousedown', el, options);
-    this.fireEvent('mouseup', el, options);
     this.fireEvent('click', el, options);
   }
 
   public rightClickTo(coordinates: Coordinates) {
-    const absCoordinates = this.getAbsoluteCoordinates(coordinates);
-    const el = <HTMLElement>this.getElementFromPoint(absCoordinates);
+    const payload = this.getMouseEventPayload(coordinates);
 
-    if (!el) {
+    if (payload === null) {
       return;
     }
 
-    const options = {
-      clientX: absCoordinates.x,
-      clientY: absCoordinates.y,
-      view: window
-    };
-
-    this.fireEvent('contextmenu', el, options);
+    this.fireEvent('contextmenu', ...payload);
   }
 
   public dblClickTo(coordinates: Coordinates) {
@@ -164,6 +176,25 @@ export class DomController {
     this.fireEvent('scroll', el);
   }
 
+  private getMouseEventPayload(
+    coordinates: Coordinates
+  ): [HTMLElement, Partial<MouseEvent>] | null {
+    const absCoordinates = this.getAbsoluteCoordinates(coordinates);
+    const el = <HTMLElement>this.getElementFromPoint(absCoordinates);
+
+    if (!el) {
+      return null;
+    }
+
+    const options = {
+      clientX: absCoordinates.x,
+      clientY: absCoordinates.y,
+      view: window
+    };
+
+    return [el, options];
+  }
+
   private getAbsoluteCoordinates({ x, y }: Coordinates): Coordinates {
     const { innerHeight, innerWidth } = window;
 
@@ -196,6 +227,7 @@ export class DomController {
       case 'mousedown':
       case 'mouseup':
       case 'contextmenu':
+      case 'mousemove':
         event = new MouseEvent(type, {
           ...defaultOptions,
           ...options

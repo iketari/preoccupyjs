@@ -1,11 +1,5 @@
-import { AbstractTransport, TransportEvents } from './transports';
-import { DblClickToAction } from './actions/DblClickToAction';
-import { ScrollByAction } from './actions/ScrollByAction';
-import { KeypressAction } from './actions/KeypressAction';
-import { ClickToAction } from './actions/ClickToAction';
-import { MoveToAction } from './actions/MoveToAction';
 import { actionMap } from './actions';
-import { PreoccupyAction } from './actions/base';
+import { AbstractTransport, TransportEvents } from './transports';
 
 export interface Coordinates {
   x: number;
