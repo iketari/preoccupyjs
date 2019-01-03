@@ -4,7 +4,10 @@ var ActionsName;
 (function (ActionsName) {
     ActionsName["BASE"] = "[Action] Base";
     ActionsName["MOVE_TO"] = "[Action] Move To";
+    ActionsName["MOUSE_DOWN_TO"] = "[Action] MouseDown To";
+    ActionsName["MOUSE_UP_TO"] = "[Action] MouseUp To";
     ActionsName["CLICK_TO"] = "[Action] Click To";
+    ActionsName["RIGHT_CLICK_TO"] = "[Action] Right Click To";
     ActionsName["DBL_CLICK_TO"] = "[Action] Double Click To";
     ActionsName["KEYPRESS"] = "[Action] Keypress";
     ActionsName["KEYDOWN"] = "[Action] Keydown";
@@ -21,7 +24,6 @@ var BaseAction = /** @class */ (function () {
         console.warn("You have to implement a static method handleEvent for " + this.type + " action");
         return {};
     };
-    ;
     BaseAction.type = ActionsName.BASE;
     return BaseAction;
 }());

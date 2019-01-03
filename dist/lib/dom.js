@@ -31,27 +31,46 @@ var DomController = /** @class */ (function () {
     };
     DomController.prototype.moveCursorTo = function (coordinates) {
         var absCoordinates = this.getAbsoluteCoordinates(coordinates);
-        this.cursor.moveTo(absCoordinates);
-    };
-    DomController.prototype.clickTo = function (coordinates) {
-        var absCoordinates = this.getAbsoluteCoordinates(coordinates);
-        var el = this.getElementFromPoint(absCoordinates);
-        if (!el) {
+        var payload = this.getMouseEventPayload(coordinates);
+        if (payload === null) {
             return;
         }
+        this.fireEvent.apply(this, ['mousemove'].concat(payload));
+        this.cursor.moveTo(absCoordinates);
+    };
+    DomController.prototype.mouseDownTo = function (coordinates) {
+        var payload = this.getMouseEventPayload(coordinates);
+        if (payload === null) {
+            return;
+        }
+        this.fireEvent.apply(this, ['mousedown'].concat(payload));
+    };
+    DomController.prototype.mouseUpTo = function (coordinates) {
+        var payload = this.getMouseEventPayload(coordinates);
+        if (payload === null) {
+            return;
+        }
+        this.fireEvent.apply(this, ['mouseup'].concat(payload));
+    };
+    DomController.prototype.clickTo = function (coordinates) {
+        var payload = this.getMouseEventPayload(coordinates);
+        if (payload === null) {
+            return;
+        }
+        var el = payload[0], options = payload[1];
         if (document.activeElement != null) {
             this.fireEvent('blur', document.activeElement);
         }
         this.setFocus(el);
         this.fireEvent('focus', el);
-        var options = {
-            clientX: absCoordinates.x,
-            clientY: absCoordinates.y,
-            view: window
-        };
-        this.fireEvent('mousedown', el, options);
-        this.fireEvent('mouseup', el, options);
         this.fireEvent('click', el, options);
+    };
+    DomController.prototype.rightClickTo = function (coordinates) {
+        var payload = this.getMouseEventPayload(coordinates);
+        if (payload === null) {
+            return;
+        }
+        this.fireEvent.apply(this, ['contextmenu'].concat(payload));
     };
     DomController.prototype.dblClickTo = function (coordinates) {
         var el = this.getElementFromPoint(this.getAbsoluteCoordinates(coordinates));
@@ -129,6 +148,19 @@ var DomController = /** @class */ (function () {
         this.fireEvent('wheel', el);
         this.fireEvent('scroll', el);
     };
+    DomController.prototype.getMouseEventPayload = function (coordinates) {
+        var absCoordinates = this.getAbsoluteCoordinates(coordinates);
+        var el = this.getElementFromPoint(absCoordinates);
+        if (!el) {
+            return null;
+        }
+        var options = {
+            clientX: absCoordinates.x,
+            clientY: absCoordinates.y,
+            view: window
+        };
+        return [el, options];
+    };
     DomController.prototype.getAbsoluteCoordinates = function (_a) {
         var x = _a.x, y = _a.y;
         var innerHeight = window.innerHeight, innerWidth = window.innerWidth;
@@ -158,6 +190,8 @@ var DomController = /** @class */ (function () {
             case 'dblclick':
             case 'mousedown':
             case 'mouseup':
+            case 'contextmenu':
+            case 'mousemove':
                 event = new MouseEvent(type, __assign({}, defaultOptions, options));
                 break;
             case 'keypress':

@@ -3,7 +3,10 @@ import { Host } from '../host';
 export declare enum ActionsName {
     BASE = "[Action] Base",
     MOVE_TO = "[Action] Move To",
+    MOUSE_DOWN_TO = "[Action] MouseDown To",
+    MOUSE_UP_TO = "[Action] MouseUp To",
     CLICK_TO = "[Action] Click To",
+    RIGHT_CLICK_TO = "[Action] Right Click To",
     DBL_CLICK_TO = "[Action] Double Click To",
     KEYPRESS = "[Action] Keypress",
     KEYDOWN = "[Action] Keydown",

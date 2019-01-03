@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var transports_1 = require("./transports");
 var actions_1 = require("./actions");
+var transports_1 = require("./transports");
 var Host = /** @class */ (function () {
     function Host(transport, el) {
         var _this = this;

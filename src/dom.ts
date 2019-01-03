@@ -20,6 +20,7 @@ export class DomController {
   }
 
   public moveCursorTo(coordinates: Coordinates) {
+    const absCoordinates = this.getAbsoluteCoordinates(coordinates);
     const payload = this.getMouseEventPayload(coordinates);
 
     if (payload === null) {
@@ -27,6 +28,8 @@ export class DomController {
     }
 
     this.fireEvent('mousemove', ...payload);
+
+    this.cursor.moveTo(absCoordinates);
   }
 
   public mouseDownTo(coordinates: Coordinates) {

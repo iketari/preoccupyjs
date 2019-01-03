@@ -48,7 +48,10 @@
     (function (ActionsName) {
         ActionsName["BASE"] = "[Action] Base";
         ActionsName["MOVE_TO"] = "[Action] Move To";
+        ActionsName["MOUSE_DOWN_TO"] = "[Action] MouseDown To";
+        ActionsName["MOUSE_UP_TO"] = "[Action] MouseUp To";
         ActionsName["CLICK_TO"] = "[Action] Click To";
+        ActionsName["RIGHT_CLICK_TO"] = "[Action] Right Click To";
         ActionsName["DBL_CLICK_TO"] = "[Action] Double Click To";
         ActionsName["KEYPRESS"] = "[Action] Keypress";
         ActionsName["KEYDOWN"] = "[Action] Keydown";
@@ -143,7 +146,7 @@
         };
         ScrollByAction.handleEvent = function (host, event) {
             var coordinates = host.getRelativeCoordinate(event);
-            return new ScrollByAction(__assign({}, coordinates, { deltaX: event.deltaX, deltaY: event.deltaY }));
+            return new ScrollByAction(__assign({}, coordinates, { deltaX: event.shiftKey ? event.deltaY : 0, deltaY: event.shiftKey ? 0 : event.deltaY }));
         };
         ScrollByAction.type = ActionsName.SCROLL_BY;
         ScrollByAction.eventName = 'mousewheel';
@@ -243,16 +246,80 @@
         return KeyupAction;
     }(BaseAction));
 
+    var RightClickToAction = /** @class */ (function (_super) {
+        __extends(RightClickToAction, _super);
+        function RightClickToAction(payload) {
+            var _this = _super.call(this) || this;
+            _this.payload = payload;
+            _this.type = RightClickToAction.type;
+            return _this;
+        }
+        RightClickToAction.prototype.performEvent = function (dom, stack) {
+            dom.rightClickTo(this.payload);
+        };
+        RightClickToAction.handleEvent = function (host, event) {
+            event.preventDefault();
+            var payload = host.getRelativeCoordinate(event);
+            return new RightClickToAction(payload);
+        };
+        RightClickToAction.type = ActionsName.RIGHT_CLICK_TO;
+        RightClickToAction.eventName = 'contextmenu';
+        return RightClickToAction;
+    }(BaseAction));
+
+    var MouseDownToAction = /** @class */ (function (_super) {
+        __extends(MouseDownToAction, _super);
+        function MouseDownToAction(payload) {
+            var _this = _super.call(this) || this;
+            _this.payload = payload;
+            _this.type = MouseDownToAction.type;
+            return _this;
+        }
+        MouseDownToAction.prototype.performEvent = function (dom, stack) {
+            dom.mouseDownTo(this.payload);
+        };
+        MouseDownToAction.handleEvent = function (host, event) {
+            var payload = host.getRelativeCoordinate(event);
+            return new MouseDownToAction(payload);
+        };
+        MouseDownToAction.type = ActionsName.MOUSE_DOWN_TO;
+        MouseDownToAction.eventName = 'mousedown';
+        return MouseDownToAction;
+    }(BaseAction));
+
+    var MouseUpToAction = /** @class */ (function (_super) {
+        __extends(MouseUpToAction, _super);
+        function MouseUpToAction(payload) {
+            var _this = _super.call(this) || this;
+            _this.payload = payload;
+            _this.type = MouseUpToAction.type;
+            return _this;
+        }
+        MouseUpToAction.prototype.performEvent = function (dom, stack) {
+            dom.mouseUpTo(this.payload);
+        };
+        MouseUpToAction.handleEvent = function (host, event) {
+            var payload = host.getRelativeCoordinate(event);
+            return new MouseUpToAction(payload);
+        };
+        MouseUpToAction.type = ActionsName.MOUSE_UP_TO;
+        MouseUpToAction.eventName = 'mouseup';
+        return MouseUpToAction;
+    }(BaseAction));
+
     var actionMap = new Map([
-        [MoveToAction.type, MoveToAction],
-        [ClickToAction.type, ClickToAction],
-        [KeydownAction.type, KeydownAction],
-        [KeypressAction.type, KeypressAction],
-        [KeyupAction.type, KeyupAction],
-        [MoveToAction.type, MoveToAction],
-        [ScrollByAction.type, ScrollByAction],
-        [DblClickToAction.type, DblClickToAction]
-    ]);
+        MoveToAction,
+        ClickToAction,
+        KeydownAction,
+        KeypressAction,
+        KeyupAction,
+        MoveToAction,
+        ScrollByAction,
+        DblClickToAction,
+        RightClickToAction,
+        MouseDownToAction,
+        MouseUpToAction
+    ].map(function (Action) { return [Action.type, Action]; }));
 
     (function (TransportEvents) {
         TransportEvents[TransportEvents["connect"] = 0] = "connect";
@@ -5693,27 +5760,46 @@
         };
         DomController.prototype.moveCursorTo = function (coordinates) {
             var absCoordinates = this.getAbsoluteCoordinates(coordinates);
-            this.cursor.moveTo(absCoordinates);
-        };
-        DomController.prototype.clickTo = function (coordinates) {
-            var absCoordinates = this.getAbsoluteCoordinates(coordinates);
-            var el = this.getElementFromPoint(absCoordinates);
-            if (!el) {
+            var payload = this.getMouseEventPayload(coordinates);
+            if (payload === null) {
                 return;
             }
+            this.fireEvent.apply(this, ['mousemove'].concat(payload));
+            this.cursor.moveTo(absCoordinates);
+        };
+        DomController.prototype.mouseDownTo = function (coordinates) {
+            var payload = this.getMouseEventPayload(coordinates);
+            if (payload === null) {
+                return;
+            }
+            this.fireEvent.apply(this, ['mousedown'].concat(payload));
+        };
+        DomController.prototype.mouseUpTo = function (coordinates) {
+            var payload = this.getMouseEventPayload(coordinates);
+            if (payload === null) {
+                return;
+            }
+            this.fireEvent.apply(this, ['mouseup'].concat(payload));
+        };
+        DomController.prototype.clickTo = function (coordinates) {
+            var payload = this.getMouseEventPayload(coordinates);
+            if (payload === null) {
+                return;
+            }
+            var el = payload[0], options = payload[1];
             if (document.activeElement != null) {
                 this.fireEvent('blur', document.activeElement);
             }
             this.setFocus(el);
             this.fireEvent('focus', el);
-            var options = {
-                clientX: absCoordinates.x,
-                clientY: absCoordinates.y,
-                view: window
-            };
-            this.fireEvent('mousedown', el, options);
-            this.fireEvent('mouseup', el, options);
             this.fireEvent('click', el, options);
+        };
+        DomController.prototype.rightClickTo = function (coordinates) {
+            var payload = this.getMouseEventPayload(coordinates);
+            if (payload === null) {
+                return;
+            }
+            this.fireEvent.apply(this, ['contextmenu'].concat(payload));
         };
         DomController.prototype.dblClickTo = function (coordinates) {
             var el = this.getElementFromPoint(this.getAbsoluteCoordinates(coordinates));
@@ -5791,6 +5877,19 @@
             this.fireEvent('wheel', el);
             this.fireEvent('scroll', el);
         };
+        DomController.prototype.getMouseEventPayload = function (coordinates) {
+            var absCoordinates = this.getAbsoluteCoordinates(coordinates);
+            var el = this.getElementFromPoint(absCoordinates);
+            if (!el) {
+                return null;
+            }
+            var options = {
+                clientX: absCoordinates.x,
+                clientY: absCoordinates.y,
+                view: window
+            };
+            return [el, options];
+        };
         DomController.prototype.getAbsoluteCoordinates = function (_a) {
             var x = _a.x, y = _a.y;
             var innerHeight = window.innerHeight, innerWidth = window.innerWidth;
@@ -5820,6 +5919,8 @@
                 case 'dblclick':
                 case 'mousedown':
                 case 'mouseup':
+                case 'contextmenu':
+                case 'mousemove':
                     event = new MouseEvent(type, __assign({}, defaultOptions, options));
                     break;
                 case 'keypress':

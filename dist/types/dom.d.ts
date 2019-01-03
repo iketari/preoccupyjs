@@ -5,7 +5,10 @@ export declare class DomController {
     constructor(el: Element);
     init(): void;
     moveCursorTo(coordinates: Coordinates): void;
+    mouseDownTo(coordinates: Coordinates): void;
+    mouseUpTo(coordinates: Coordinates): void;
     clickTo(coordinates: Coordinates): void;
+    rightClickTo(coordinates: Coordinates): void;
     dblClickTo(coordinates: Coordinates): void;
     keydown(payload: Partial<KeyboardEvent>): any;
     keyup(payload: object): any;
@@ -18,6 +21,7 @@ export declare class DomController {
         deltaX: number;
         deltaY: number;
     }): void;
+    private getMouseEventPayload;
     private getAbsoluteCoordinates;
     private getElementFromPoint;
     private setFocus;

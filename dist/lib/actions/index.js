@@ -7,14 +7,20 @@ var ScrollByAction_1 = require("./ScrollByAction");
 var DblClickToAction_1 = require("./DblClickToAction");
 var KeydownAction_1 = require("./KeydownAction");
 var KeyupAction_1 = require("./KeyupAction");
+var RightClickToAction_1 = require("./RightClickToAction");
+var MouseDownToAction_1 = require("./MouseDownToAction");
+var MouseUpToAction_1 = require("./MouseUpToAction");
 exports.actionMap = new Map([
-    [MoveToAction_1.MoveToAction.type, MoveToAction_1.MoveToAction],
-    [ClickToAction_1.ClickToAction.type, ClickToAction_1.ClickToAction],
-    [KeydownAction_1.KeydownAction.type, KeydownAction_1.KeydownAction],
-    [KeypressAction_1.KeypressAction.type, KeypressAction_1.KeypressAction],
-    [KeyupAction_1.KeyupAction.type, KeyupAction_1.KeyupAction],
-    [MoveToAction_1.MoveToAction.type, MoveToAction_1.MoveToAction],
-    [ScrollByAction_1.ScrollByAction.type, ScrollByAction_1.ScrollByAction],
-    [DblClickToAction_1.DblClickToAction.type, DblClickToAction_1.DblClickToAction]
-]);
+    MoveToAction_1.MoveToAction,
+    ClickToAction_1.ClickToAction,
+    KeydownAction_1.KeydownAction,
+    KeypressAction_1.KeypressAction,
+    KeyupAction_1.KeyupAction,
+    MoveToAction_1.MoveToAction,
+    ScrollByAction_1.ScrollByAction,
+    DblClickToAction_1.DblClickToAction,
+    RightClickToAction_1.RightClickToAction,
+    MouseDownToAction_1.MouseDownToAction,
+    MouseUpToAction_1.MouseUpToAction
+].map(function (Action) { return [Action.type, Action]; }));
 //# sourceMappingURL=index.js.map

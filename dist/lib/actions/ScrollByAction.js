@@ -38,7 +38,7 @@ var ScrollByAction = /** @class */ (function (_super) {
     };
     ScrollByAction.handleEvent = function (host, event) {
         var coordinates = host.getRelativeCoordinate(event);
-        return new ScrollByAction(__assign({}, coordinates, { deltaX: event.deltaX, deltaY: event.deltaY }));
+        return new ScrollByAction(__assign({}, coordinates, { deltaX: event.shiftKey ? event.deltaY : 0, deltaY: event.shiftKey ? 0 : event.deltaY }));
     };
     ScrollByAction.type = base_1.ActionsName.SCROLL_BY;
     ScrollByAction.eventName = 'mousewheel';
