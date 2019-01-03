@@ -48,6 +48,23 @@ export class DomController {
     this.fireEvent('click', el, options);
   }
 
+  public rightClickTo(coordinates: Coordinates) {
+    const absCoordinates = this.getAbsoluteCoordinates(coordinates);
+    const el = <HTMLElement>this.getElementFromPoint(absCoordinates);
+
+    if (!el) {
+      return;
+    }
+
+    const options = {
+      clientX: absCoordinates.x,
+      clientY: absCoordinates.y,
+      view: window
+    };
+
+    this.fireEvent('contextmenu', el, options);
+  }
+
   public dblClickTo(coordinates: Coordinates) {
     const el = <HTMLElement>this.getElementFromPoint(this.getAbsoluteCoordinates(coordinates));
     switch (el.tagName.toLowerCase()) {
@@ -178,6 +195,7 @@ export class DomController {
       case 'dblclick':
       case 'mousedown':
       case 'mouseup':
+      case 'contextmenu':
         event = new MouseEvent(type, {
           ...defaultOptions,
           ...options
