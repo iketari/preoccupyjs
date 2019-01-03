@@ -1,8 +1,8 @@
 import { PreoccupyAction } from '../actions/base';
-import { Subject } from 'rxjs';
+import { WebSocketSubject } from 'rxjs/webSocket';
 import { Message, AbstractTransport, Listener, TransportEvents } from './abstract';
 export interface RxjsTransportOptions {
-    subject: Subject<any>;
+    subject: WebSocketSubject<Object>;
     filterFn?: (rawMsg: object) => boolean;
     wrapFn?: (data: Message) => object;
 }
