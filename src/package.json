@@ -1,7 +1,11 @@
 {
   "name": "preoccupyjs",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "An emulator of user behavioural actions for SPAs. Could be used as a part of Remote Control functionality.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iketari/preoccupyjs/"
+  },
   "main": "preoccupyjs.umd.js",
   "module": "preoccupyjs.es5.js",
   "typings": "types/preoccupyjs.d.ts",

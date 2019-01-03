@@ -36,6 +36,9 @@ var DomController = /** @class */ (function () {
     DomController.prototype.clickTo = function (coordinates) {
         var absCoordinates = this.getAbsoluteCoordinates(coordinates);
         var el = this.getElementFromPoint(absCoordinates);
+        if (!el) {
+            return;
+        }
         if (document.activeElement != null) {
             this.fireEvent('blur', document.activeElement);
         }

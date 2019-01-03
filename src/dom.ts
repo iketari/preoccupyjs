@@ -28,6 +28,11 @@ export class DomController {
   public clickTo(coordinates: Coordinates) {
     const absCoordinates = this.getAbsoluteCoordinates(coordinates);
     const el = <HTMLElement>this.getElementFromPoint(absCoordinates);
+
+    if (!el) {
+      return;
+    }
+
     if (document.activeElement != null) {
       this.fireEvent('blur', <HTMLElement>document.activeElement);
     }
