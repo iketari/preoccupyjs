@@ -180,7 +180,7 @@ var DomController = /** @class */ (function () {
     };
     DomController.prototype.isScrollableY = function (el) {
         var style = getComputedStyle(el);
-        return ['auto', 'scroll'].includes(style.overflowY) && el.scrollHeight > el.clientHeight;
+        return (['auto', 'scroll'].includes(style.overflowY) && el.scrollHeight > el.clientHeight);
     };
     return DomController;
 }());

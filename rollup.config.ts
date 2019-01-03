@@ -7,14 +7,15 @@ import json from 'rollup-plugin-json';
 import copy from 'rollup-plugin-copy';
 
 const pkg = require('./src/package.json');
+const distFldr = 'dist';
 
 const libraryName = 'preoccupyjs';
 
 export default {
   input: `src/${libraryName}.ts`,
   output: [
-    { file: pkg.main, name: camelCase(libraryName), format: 'umd', sourcemap: true },
-    { file: pkg.module, format: 'es', sourcemap: true }
+    { file: `${distFldr}/${pkg.main}`, name: camelCase(libraryName), format: 'umd', sourcemap: true },
+    { file: `${distFldr}/${pkg.module}`, format: 'es', sourcemap: true }
   ],
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
   external: ['rxjs'],
