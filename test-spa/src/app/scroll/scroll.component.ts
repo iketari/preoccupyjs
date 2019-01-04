@@ -8,7 +8,7 @@ const SCROLL_OFFSET = 20;
   styleUrls: ['./scroll.component.css']
 })
 export class ScrollComponent implements OnInit {
-  @ViewChild('scrollable') scrollableElRef: ElementRef;
+  @ViewChild('scrollable') scrollableElRef: ElementRef = null;
   dates: Date[] = [];
   constructor() { }
 
@@ -16,7 +16,7 @@ export class ScrollComponent implements OnInit {
     this.dates = this.generate(10);
   }
 
-  onScroll(event) {
+  onScroll(event: MouseEvent) {
     console.log(event)
     const {scrollHeight, scrollTop, clientHeight} = <HTMLDivElement>event.target;
 
