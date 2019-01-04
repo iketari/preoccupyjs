@@ -1,6 +1,6 @@
 {
   "name": "preoccupyjs",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "description": "",
   "keywords": [],
   "files": [
@@ -10,7 +10,7 @@
   "author": "Artsiom Mezin <artsiom.mezin@behavox.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/iketari/preoccupyjs/"
+    "url": "https://github.com/iketari/preoccupyjs.git"
   },
   "license": "MIT",
   "engines": {
@@ -109,7 +109,7 @@
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rollup-plugin-typescript2": "^0.18.0",
-    "semantic-release": "^15.9.16",
+    "semantic-release": "^15.13.2",
     "travis-deploy-once": "^5.0.9",
     "ts-jest": "^23.10.2",
     "ts-node": "^7.0.1",
