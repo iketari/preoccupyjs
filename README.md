@@ -1,7 +1,7 @@
 # PreoccupyJS
 
 <p align="center">
-    <img src="http://artsiom.mezin.eu/preoccupyjs/occupy_logo.5333adb14d3b90a39995.png" alt="PrepoccupyJS's custom image"/>
+    <img src="https://github.com/iketari/preoccupyjs/raw/master/test-spa/src/assets/occupy_logo.png" alt="PrepoccupyJS's custom image"/>
 </p>
 
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
@@ -19,7 +19,11 @@ An emulator of user behavioural actions for SPAs. Could be used as a part of Rem
 4. Click **Connect**
 5. Enjoy!
 
-Demo: http://artsiom.mezin.eu/preoccupyjs (Open twice and read the steps above ;)
+Demo: http://artsiom.mezin.eu/preoccupyjs/demo (Open twice and read the steps above ;)
+
+### Docs
+
+Docs: http://artsiom.mezin.eu/preoccupyjs/docs
 
 ### Usage
 
