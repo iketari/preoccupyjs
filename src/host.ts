@@ -8,10 +8,18 @@ export interface Coordinates {
 
 export class Host {
   private actions: Map<string, any> = actionMap;
-  constructor(private transport: AbstractTransport, private el: HTMLElement) {
-    transport.on(TransportEvents.connect, event => {
+  constructor(private transport: AbstractTransport, private el: HTMLElement) {}
+
+  public start() {
+    this.transport.on(TransportEvents.connect, event => {
       this.initEvents();
     });
+
+    this.transport.handshake();
+  }
+
+  public stop() {
+    this.transport.disconnect();
   }
 
   private initEvents() {

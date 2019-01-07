@@ -16,13 +16,9 @@ export function createClient(
   el: HTMLElement,
   transport: AbstractTransport = localTransport
 ): Client {
-  const client = new Client(transport, new DomController(el));
-  transport.handshake();
-  return client;
+  return new Client(transport, new DomController(el));
 }
 
 export function createHost(el: HTMLElement, transport: AbstractTransport = localTransport): Host {
-  const host = new Host(transport, el);
-  transport.handshake();
-  return host;
+  return new Host(transport, el);
 }

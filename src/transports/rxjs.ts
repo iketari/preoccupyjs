@@ -2,6 +2,7 @@ import { PreoccupyAction } from '../actions/base';
 import { WebSocketSubject } from 'rxjs/webSocket';
 import { filter } from 'rxjs/operators';
 import { Message, AbstractTransport, Listener, TransportEvents } from './abstract';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 export interface RxjsTransportOptions {
   subject: WebSocketSubject<Object>;
@@ -10,6 +11,7 @@ export interface RxjsTransportOptions {
 }
 
 export class RxjsTransport implements AbstractTransport {
+  private subscription: Subscription = null;
   private listeners: { [prop: string]: Listener[] } = {};
   private connected: boolean = false;
   private subject: WebSocketSubject<Object>;
@@ -21,6 +23,13 @@ export class RxjsTransport implements AbstractTransport {
     this.filterFn = options.filterFn === undefined ? rawData => Boolean(rawData) : options.filterFn;
     this.wrapFn =
       options.wrapFn === undefined ? message => ({ data: message.serialize() }) : options.wrapFn;
+  }
+
+  public disconnect() {
+    this.listeners = {};
+    this.subscription && this.subscription.unsubscribe();
+
+    this.connected = false;
   }
 
   public on(eventName: TransportEvents, callback: Listener): void {
@@ -44,10 +53,12 @@ export class RxjsTransport implements AbstractTransport {
   }
 
   public connect() {
-    this.subject.pipe(filter(rawData => this.filterFn(rawData))).subscribe((data: any) => {
-      const message = Message.parse('|||' + data.data);
-      this.trigger(TransportEvents.action, message);
-    });
+    this.subscription = this.subject
+      .pipe(filter(rawData => this.filterFn(rawData)))
+      .subscribe((data: any) => {
+        const message = Message.parse('|||' + data.data);
+        this.trigger(TransportEvents.action, message);
+      });
 
     this.trigger(TransportEvents.connect, null);
   }

@@ -8,17 +8,9 @@ const STACK_LENGTH = 30;
 export class Client {
   private actionStack: PreoccupyAction[] = [];
   private actions: Map<string, any> = actionMap;
-  constructor(transport: AbstractTransport, private dom: DomController) {
-    transport.on(TransportEvents.connect, event => {
-      this.dom.init();
-    });
+  private active: boolean = false;
 
-    transport.on(TransportEvents.action, event => {
-      const message: Message = event.detail;
-
-      this.perform(message.data as RawPreoccupyAction);
-    });
-  }
+  constructor(private transport: AbstractTransport, private dom: DomController) {}
 
   public perform(rawAction: RawPreoccupyAction) {
     if (this.actions.has(rawAction.type)) {
@@ -31,5 +23,24 @@ export class Client {
         this.actionStack.shift();
       }
     }
+  }
+
+  public start() {
+    this.transport.on(TransportEvents.connect, event => {
+      this.dom.init();
+    });
+
+    this.transport.on(TransportEvents.action, event => {
+      const message: Message = event.detail;
+
+      this.perform(message.data as RawPreoccupyAction);
+    });
+
+    this.transport.handshake();
+  }
+
+  public stop() {
+    this.transport.disconnect();
+    this.dom.destroy();
   }
 }

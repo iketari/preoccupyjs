@@ -17,6 +17,14 @@ export class LocalTransport implements AbstractTransport {
     }
   }
 
+  public disconnect() {
+    this.cleanUp();
+    window.removeEventListener('storage', this);
+    this.listeners = {};
+
+    this.connected = false;
+  }
+
   public on(eventName: TransportEvents, callback: Listener): void {
     if (!this.listeners[eventName]) {
       this.listeners[eventName] = [];
@@ -50,8 +58,7 @@ export class LocalTransport implements AbstractTransport {
   }
 
   private connect() {
-    this.cleanUp();
-    window.removeEventListener('storage', this);
+    this.disconnect();
     window.addEventListener('storage', this);
     this.connected = true;
     this.trigger(TransportEvents.connect);

@@ -16,6 +16,7 @@ export interface AbstractTransport {
   on(type: TransportEvents, callback: Listener): void;
   publish(action: PreoccupyAction): void;
   handshake(): void;
+  disconnect(): void;
 }
 
 export class Message {

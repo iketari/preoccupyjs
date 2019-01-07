@@ -19,6 +19,10 @@ export class DomController {
     }
   }
 
+  public destroy() {
+    this.cursor.getEl().remove();
+  }
+
   public moveCursorTo(coordinates: Coordinates) {
     const absCoordinates = this.getAbsoluteCoordinates(coordinates);
     const payload = this.getMouseEventPayload(coordinates);
