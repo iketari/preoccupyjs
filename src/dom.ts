@@ -11,7 +11,7 @@ export class DomController {
   public init() {
     this.cursor.moveTo({ x: 0, y: 0 });
 
-    const bodyEl = this.el.querySelector('body') as HTMLBodyElement;
+    const bodyEl = this.el.querySelector('body');
     if (getComputedStyle(this.el).position !== 'static') {
       this.el.appendChild(this.cursor.getEl());
     } else {
@@ -276,15 +276,11 @@ export class DomController {
 
   private isScrollableX(el: HTMLElement) {
     const style = getComputedStyle(el);
-    return (
-      ['auto', 'scroll'].includes(style.overflowX as string) && el.scrollWidth > el.clientWidth
-    );
+    return ['auto', 'scroll'].includes(style.overflowX) && el.scrollWidth > el.clientWidth;
   }
 
   private isScrollableY(el: HTMLElement) {
     const style = getComputedStyle(el);
-    return (
-      ['auto', 'scroll'].includes(style.overflowY as string) && el.scrollHeight > el.clientHeight
-    );
+    return ['auto', 'scroll'].includes(style.overflowY) && el.scrollHeight > el.clientHeight;
   }
 }
