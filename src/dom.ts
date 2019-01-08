@@ -86,6 +86,11 @@ export class DomController {
 
   public dblClickTo(coordinates: Coordinates) {
     const el = this.getElementFromPoint(this.getAbsoluteCoordinates(coordinates)) as HTMLElement;
+
+    if (!el) {
+      return;
+    }
+
     switch (el.tagName.toLowerCase()) {
       case 'textarea':
       case 'input':
@@ -108,7 +113,7 @@ export class DomController {
         case 'textarea':
         case 'input':
           const inputEl = el as HTMLInputElement;
-          if (['checkbox', 'radio'].includes(inputEl.type)) {
+          if (['checkbox', 'radio'].includes(inputEl.type) || !inputEl.value) {
             break;
           }
           inputEl.value = (el as HTMLTextAreaElement).value.slice(0, -1);
@@ -167,6 +172,10 @@ export class DomController {
     let initialEl = this.getElementFromPoint(this.getAbsoluteCoordinates({ x, y })) as HTMLElement;
     let scrollableEl: HTMLElement | undefined;
     let el = initialEl;
+
+    if (!el) {
+      return;
+    }
 
     while (el && el.parentElement) {
       if (this.isScrollable(el)) {
