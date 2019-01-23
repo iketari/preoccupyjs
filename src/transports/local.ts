@@ -58,7 +58,6 @@ export class LocalTransport implements AbstractTransport {
   }
 
   private connect() {
-    this.disconnect();
     window.addEventListener('storage', this);
     this.connected = true;
     this.trigger(TransportEvents.connect);

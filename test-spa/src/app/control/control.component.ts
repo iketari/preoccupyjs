@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
-import { createHost } from '@preoccupyjs';
+import { createHost } from 'preoccupyjs';
 import { fromEvent } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 
@@ -17,5 +17,6 @@ export class ControlComponent implements OnInit {
 
   public onConnectClick() {
     this.host = createHost(this.padView.nativeElement);
+    this.host.start();
   }
 }

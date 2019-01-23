@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { createClient } from '@preoccupyjs';
-
-
+import { createClient } from 'preoccupyjs';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +11,8 @@ export class AppComponent {
   activated = false;
 
   onActivate() {
-    createClient(document.documentElement);
+    const client = createClient(document.documentElement);
+    client.start();
     this.activated = true;
   }
 }

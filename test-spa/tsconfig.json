@@ -19,7 +19,7 @@
       "dom"
     ],
     "paths": {
-      "@preoccupyjs": ["./../src/preoccupyjs"]
+      "preoccupyjs": ["./../src/preoccupyjs"]
     }
   }
 }
