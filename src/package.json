@@ -1,6 +1,6 @@
 {
   "name": "preoccupyjs",
-  "version": "1.1.1",
+  "version": "AUTOMATIC",
   "description": "An emulator of user behavioural actions for SPAs. Could be used as a part of Remote Control functionality.",
   "repository": {
     "type": "git",
