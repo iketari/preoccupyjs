@@ -25,6 +25,10 @@ Demo: http://artsiom.mezin.eu/preoccupyjs/demo (Open twice and read the steps ab
 
 Docs: http://artsiom.mezin.eu/preoccupyjs/docs
 
+### Coverage
+
+HTML report: http://artsiom.mezin.eu/preoccupyjs/coverage/lcov-report/
+
 ### Usage
 
 TBD. Have a look at an Angular Demo app in `test-spa` directory.
