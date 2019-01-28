@@ -18,10 +18,10 @@ describe('Client', () => {
         disconnectSpy = jest.fn();
 
         transportMock = {
-            on() {},
-            publish() {},
-            disconnect: <any>disconnectSpy,
-            handshake: <any>handshakeSpy
+            on: () => null,
+            publish: () => null,
+            disconnect: disconnectSpy as any,
+            handshake: handshakeSpy as any
         };
 
         domMock = {
@@ -35,10 +35,10 @@ describe('Client', () => {
 
         Action = class implements PreoccupyAction {
             constructor(payload: object) {}
-            performEvent = <any>performEventSpy;
+            performEvent = performEventSpy as any;
         };
 
-        ((<any>client).actions as Map<string, any>).set('abstract', Action);
+        ((client as any).actions as Map<string, any>).set('abstract', Action);
     });
 
 

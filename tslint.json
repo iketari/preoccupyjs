@@ -5,6 +5,7 @@
   ],
   "rules": {
     "deprecation": false,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "no-empty": false
   }
 }

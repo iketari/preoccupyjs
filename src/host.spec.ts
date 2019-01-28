@@ -23,8 +23,8 @@ describe('Host', () => {
     transportMock = {
       on() {},
       publish() {},
-      disconnect: <any>disconnectSpy,
-      handshake: <any>handshakeSpy
+      disconnect: disconnectSpy as any,
+      handshake: handshakeSpy as any
     };
 
     host = new Host(transportMock, padEl);
@@ -36,12 +36,12 @@ describe('Host', () => {
       public type: string = MOCK_ACTION_TYPE;
       static eventName: string = MOCK_ACTION_TYPE;
       constructor(public payload: object) {}
-      performEvent = <any>performEventSpy;
+      performEvent = performEventSpy as any;
 
       static handleEvent = jest.fn();
     };
 
-    ((<any>host).actions as Map<string, any>).set('abstract', Action);
+    ((host as any).actions as Map<string, any>).set('abstract', Action);
   });
 
   afterEach(() => {
