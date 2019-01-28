@@ -18,7 +18,8 @@
     "remote",
     "control",
     "DOM",
-    "API"
+    "API",
+    "virtual mouse"
   ],
   "author": {
     "email": "artsiom.mezin@behavox.com",
