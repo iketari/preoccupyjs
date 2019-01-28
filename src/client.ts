@@ -8,7 +8,6 @@ const STACK_LENGTH = 30;
 export class Client {
   private actionStack: PreoccupyAction[] = [];
   private actions: Map<string, any> = actionMap;
-  private active: boolean = false;
 
   constructor(private transport: AbstractTransport, private dom: DomController) {}
 

@@ -1,8 +1,11 @@
-import { PreoccupyAction } from '../actions/base';
-import { WebSocketSubject } from 'rxjs/webSocket';
-import { filter } from 'rxjs/operators';
-import { Message, AbstractTransport, Listener, TransportEvents } from './abstract';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { filter } from 'rxjs/operators';
+import { WebSocketSubject } from 'rxjs/webSocket';
+
+import { PreoccupyAction } from '../actions/base';
+import { AbstractTransport, TransportEvents } from './abstract';
+import { EventEmitter } from './EventEmitter';
+import { Message } from './Message';
 
 export interface RxjsTransportOptions {
   subject: WebSocketSubject<Object>;
@@ -10,15 +13,15 @@ export interface RxjsTransportOptions {
   wrapFn?: (data: Message) => object;
 }
 
-export class RxjsTransport implements AbstractTransport {
+export class RxjsTransport extends EventEmitter implements AbstractTransport {
   private subscription: Subscription = null;
-  private listeners: { [prop: string]: Listener[] } = {};
   private connected: boolean = false;
   private subject: WebSocketSubject<Object>;
   private filterFn: (rawMsg: object) => boolean;
   private wrapFn: (message: Message) => object;
 
   constructor(options: RxjsTransportOptions) {
+    super();
     this.subject = options.subject;
     this.filterFn = options.filterFn === undefined ? rawData => Boolean(rawData) : options.filterFn;
     this.wrapFn =
@@ -26,17 +29,10 @@ export class RxjsTransport implements AbstractTransport {
   }
 
   public disconnect() {
-    this.listeners = {};
+    this.off();
     this.subscription && this.subscription.unsubscribe();
 
     this.connected = false;
-  }
-
-  public on(eventName: TransportEvents, callback: Listener): void {
-    if (!this.listeners[eventName]) {
-      this.listeners[eventName] = [];
-    }
-    this.listeners[eventName].push(callback);
   }
 
   public publish(action: PreoccupyAction): void {
@@ -61,16 +57,5 @@ export class RxjsTransport implements AbstractTransport {
       });
 
     this.trigger(TransportEvents.connect, null);
-  }
-
-  private trigger(type: TransportEvents, detail?: any) {
-    if (Array.isArray(this.listeners[type])) {
-      this.listeners[type].forEach(callback =>
-        callback({
-          type,
-          detail
-        })
-      );
-    }
   }
 }

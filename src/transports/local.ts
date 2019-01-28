@@ -1,13 +1,16 @@
 import { PreoccupyAction } from './../actions/base';
-import { AbstractTransport, Listener, Message, TransportEvents } from './abstract';
+import { AbstractTransport, TransportEvents } from './abstract';
+import { EventEmitter } from './EventEmitter';
+import { Message } from './Message';
 
-export class LocalTransport implements AbstractTransport {
+export class LocalTransport extends EventEmitter implements AbstractTransport {
   private connected: boolean = false;
-  private listeners: { [prop: string]: Listener[] } = {};
   private publishedMessages: Message[] = [];
   private storage: Storage = localStorage;
 
-  constructor(private preifx: string = 'prefix', private stackSize: number = 10) {}
+  constructor(private preifx: string = 'prefix', private stackSize: number = 10) {
+    super();
+  }
 
   public handshake() {
     if (this.connected) {
@@ -20,16 +23,9 @@ export class LocalTransport implements AbstractTransport {
   public disconnect() {
     this.cleanUp();
     window.removeEventListener('storage', this);
-    this.listeners = {};
+    this.off();
 
     this.connected = false;
-  }
-
-  public on(eventName: TransportEvents, callback: Listener): void {
-    if (!this.listeners[eventName]) {
-      this.listeners[eventName] = [];
-    }
-    this.listeners[eventName].push(callback);
   }
 
   public publish(action: PreoccupyAction): void {
@@ -78,17 +74,6 @@ export class LocalTransport implements AbstractTransport {
       if (this.isExternalMessage(message)) {
         this.trigger(TransportEvents.action, message);
       }
-    }
-  }
-
-  private trigger(type: TransportEvents, detail?: any) {
-    if (Array.isArray(this.listeners[type])) {
-      this.listeners[type].forEach(callback =>
-        callback({
-          type,
-          detail
-        })
-      );
     }
   }
 

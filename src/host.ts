@@ -16,9 +16,7 @@ export class Host {
   constructor(private transport: AbstractTransport, private el: HTMLElement) {}
 
   public start() {
-    this.transport.on(TransportEvents.connect, event => {
-      this.initEvents();
-    });
+    this.initEvents();
 
     this.transport.handshake();
   }
@@ -45,7 +43,7 @@ export class Host {
     );
   }
 
-  public getRelativeCoordinate(event: MouseEvent): { x: number; y: number } {
+  public getRelativeCoordinate(event: MouseEvent): Coordinates {
     const { offsetX, offsetY } = event;
     const { clientHeight, clientWidth } = event.target as HTMLDivElement;
 

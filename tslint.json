@@ -4,6 +4,7 @@
     "tslint-config-prettier"
   ],
   "rules": {
-    "deprecation": false
+    "deprecation": false,
+    "noImplicitAny": false
   }
 }

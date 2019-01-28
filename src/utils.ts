@@ -1,4 +1,4 @@
-export function css(el: HTMLElement, styles: Partial<CSSStyleDeclaration>) {
+export function css(el: HTMLElement, styles: { [key: string]: string }) {
   for (const [prop, value] of Object.entries(styles)) {
     el.style.setProperty(prop, value);
   }

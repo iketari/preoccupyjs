@@ -13,17 +13,21 @@ export enum ActionsName {
   KEYUP = '[Action] Keyup',
   SCROLL_BY = '[Action] Scroll By'
 }
+
 export interface RawPreoccupyAction {
   type: string;
   payload?: object;
 }
+
 export interface PreoccupyAction {
   payload?: object;
   performEvent(dom: DomController, stack: PreoccupyAction[]): void;
 }
+
 export abstract class BaseAction implements PreoccupyAction {
   public type: string;
   static type: string = ActionsName.BASE;
+
   abstract performEvent(dom: DomController, stack: PreoccupyAction[]): void;
   static handleEvent(host: Host, event: Event): PreoccupyAction {
     console.warn(`You have to implement a static method handleEvent for ${this.type} action`);
