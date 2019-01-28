@@ -61,7 +61,7 @@
         "@semantic-release/git",
         {
           "assets": [
-            "**/package.json",
+            "src/package.json",
             "CHANGELOG.md"
           ],
           "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
@@ -72,7 +72,12 @@
         {
           "assets": [
             {
-              "path": "dist/**"
+              "path": "dist/preoccupyjs.es5.js",
+              "label": "ES5 Bundle"
+            },
+            {
+              "path": "dist/preoccupyjs.umd.js",
+              "label": "UMD Bundle"
             }
           ]
         }
