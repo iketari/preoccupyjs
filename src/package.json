@@ -11,7 +11,7 @@
   "typings": "types/preoccupyjs.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postpublish": "cp -r dist/package.json src"
+    "postpublish": "cp -r package.json ./../src"
   },
   "keywords": [
     "PreoccupyJS",
