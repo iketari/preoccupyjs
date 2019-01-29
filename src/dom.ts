@@ -20,7 +20,7 @@ export class DomController {
   }
 
   public destroy() {
-    this.cursor.getEl().remove();
+    this.cursor.destroy();
   }
 
   public moveCursorTo(coordinates: Coordinates) {

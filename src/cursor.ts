@@ -15,6 +15,10 @@ export class Cursor {
     return this.el;
   }
 
+  public destroy() {
+    this.el && this.el.remove();
+  }
+
   private createCursorEl() {
     const el = document.createElement('div');
     css(el, {

@@ -94,7 +94,7 @@
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
     "testEnvironment": "jsdom",
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -102,7 +102,9 @@
     ],
     "setupTestFrameworkScriptFile": "<rootDir>/test/jestSetup.js",
     "testPathIgnorePatterns": [
-      "/test-spa/"
+      "/test-spa/",
+      "/dist/",
+      "/docs/"
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
