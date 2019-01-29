@@ -20,4 +20,14 @@ describe('Cursor', () => {
       );
     });
   });
+
+  describe('destroy', () => {
+    it('should remote the element from the DOM', () => {
+      document.body.append(cursor.getEl());
+
+      cursor.destroy();
+
+      expect(cursor.getEl().parentNode).toBeNull();
+    });
+  });
 });
