@@ -13,7 +13,7 @@ An emulator of user behavioural actions for SPAs. Could be used as a part of Rem
 
 ### Demo
 
-1. Open http://artsiom.mezin.eu/preoccupyjs/demo
+1. Open https://artsiom.mezin.eu/preoccupyjs/demo
 2. Click **Activate remote control**
 3. Click **Control** to open a new tab
 4. In the oppened tab click **Connect**. You will see a system dialog to choose the window to broadcast the screen. Please, select the third one tab with the title "Chrome Tab". From the options list select the tab with the title "PreoccupyJS. Test Application".
@@ -21,11 +21,11 @@ An emulator of user behavioural actions for SPAs. Could be used as a part of Rem
 
 ### Docs
 
-Docs: http://artsiom.mezin.eu/preoccupyjs/docs
+Docs: https://artsiom.mezin.eu/preoccupyjs/docs
 
 ### Coverage
 
-HTML report: http://artsiom.mezin.eu/preoccupyjs/coverage/lcov-report/
+HTML report: https://artsiom.mezin.eu/preoccupyjs/coverage/lcov-report/
 
 ### Usage
 
