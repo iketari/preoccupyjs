@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>PreoccupyJS. Control pad</title>
+  <script src="https://github.com/iketari/preoccupyjs/releases/download/v1.1.6/preoccupyjs.umd.js"></script>
+  <style>
+    html, body {
+      height: 100%;
+      min-height: 100%;
+      margin: 0;
+    }
+    #connect {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 2;
+    }
+    #screenEl {
+      position: absolute;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    #pad {
+      position: absolute;
+      outline: 2px slategrey dashed;
+      height: 100vh;
+      width: 100vw;
+      cursor: crosshair;
+    }
+  </style>
+</head>
+<body>
+  <button id="connect" onclick="grabVideo()">Connect</button>
+  <video autoplay id="screenEl"></video>
+  <div id="pad"></div>
+
+  <script>
+    'use strict';
+    const { createHost } = window.preoccupyjs;
+
+    async function grabVideo() {
+      const stream = await navigator.getDisplayMedia({ video: true });
+
+      console.log(stream);
+      if (!stream) return;
+
+      screenEl.srcObject = stream;
+
+      const host = createHost(pad);
+
+      host.start();
+    }
+  </script>
+</body>
+</html>
