@@ -36,17 +36,23 @@
 <body>
   <button id="connect" onclick="grabVideo()">Connect</button>
   <video autoplay id="screenEl"></video>
-  <div id="pad"></div>
+  <div tabindex="0" id="pad"></div>
 
   <script>
     'use strict';
     const { createHost } = window.preoccupyjs;
 
     async function grabVideo() {
-      const stream = await navigator.getDisplayMedia({ video: true });
+      const stream = await navigator.getDisplayMedia ?
+         navigator.getDisplayMedia({ video: true }) :
+         navigator.mediaDevices.getUserMedia ?
+         navigator.mediaDevices.getDisplayMedia({ video: true }) :
+         Promise.resolve(null);
 
-      console.log(stream);
-      if (!stream) return;
+      if (!stream) {
+        alert('Please, install Chrome 72 or enable the flag chrome://flags/#enable-experimental-web-platform-features to proceed');
+        return;
+      };
 
       screenEl.srcObject = stream;
 
