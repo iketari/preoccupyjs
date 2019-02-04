@@ -5,6 +5,10 @@ import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
 if (environment.production) {
+  if (location.protocol !== 'https:') {
+    location.href = location.href.replace('http', 'https');
+  }
+
   enableProdMode();
 }
 
