@@ -43,11 +43,11 @@
     const { createHost } = window.preoccupyjs;
 
     async function grabVideo() {
-      const stream = await navigator.getDisplayMedia ?
+      const stream = await (navigator.getDisplayMedia ?
          navigator.getDisplayMedia({ video: true }) :
          navigator.mediaDevices.getUserMedia ?
          navigator.mediaDevices.getDisplayMedia({ video: true }) :
-         Promise.resolve(null);
+         Promise.resolve(null));
 
       if (!stream) {
         alert('Please, install Chrome 72 or enable the flag chrome://flags/#enable-experimental-web-platform-features to proceed');
