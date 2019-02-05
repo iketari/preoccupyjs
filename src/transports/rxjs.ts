@@ -1,14 +1,15 @@
 import { Subscription } from 'rxjs/internal/Subscription';
 import { filter } from 'rxjs/operators';
-import { WebSocketSubject } from 'rxjs/webSocket';
 
 import { PreoccupyAction } from '../actions/base';
 import { AbstractTransport, TransportEvents } from './abstract';
 import { EventEmitter } from './EventEmitter';
 import { Message } from './Message';
 
+import { Subject } from 'rxjs';
+
 export interface RxjsTransportOptions {
-  subject: WebSocketSubject<Object>;
+  subject: Subject<object>;
   filterFn?: (rawMsg: object) => boolean;
   wrapFn?: (data: Message) => object;
 }
@@ -16,7 +17,7 @@ export interface RxjsTransportOptions {
 export class RxjsTransport extends EventEmitter implements AbstractTransport {
   private subscription: Subscription = null;
   private connected: boolean = false;
-  private subject: WebSocketSubject<Object>;
+  private subject: Subject<object>;
   private filterFn: (rawMsg: object) => boolean;
   private wrapFn: (message: Message) => object;
 
