@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>PreoccupyJS. Control pad</title>
-  <script src="https://github.com/iketari/preoccupyjs/releases/download/v1.1.6/preoccupyjs.umd.js"></script>
+  <script src="https://github.com/iketari/preoccupyjs/releases/download/v1.1.7/preoccupyjs.umd.js"></script>
   <style>
     html, body {
       height: 100%;
@@ -43,14 +43,18 @@
     const { createHost } = window.preoccupyjs;
 
     async function grabVideo() {
-      const stream = await (navigator.getDisplayMedia ?
-         navigator.getDisplayMedia({ video: true }) :
-         navigator.mediaDevices.getUserMedia ?
-         navigator.mediaDevices.getDisplayMedia({ video: true }) :
-         Promise.resolve(null));
+      let dfd = Promise.resolve(null);
+
+      if (navigator.getDisplayMedia) {
+        dfd = navigator.getDisplayMedia({ video: true });
+      } else if (navigator.mediaDevices.getDisplayMedia) {
+        dfd = navigator.mediaDevices.getDisplayMedia({ video: true });
+      }
+
+      const stream = await dfd;
 
       if (!stream) {
-        alert('Please, install Chrome 72 or enable the flag chrome://flags/#enable-experimental-web-platform-features to proceed');
+        alert('Please use Chrome 72 or enable the flag chrome://flags/#enable-experimental-web-platform-features to proceed');
         return;
       };
 
