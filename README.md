@@ -32,10 +32,10 @@ HTML report: https://artsiom.mezin.eu/preoccupyjs/coverage/lcov-report/
 The main idea of the PreoccupyJS package is to emulate users actions within a remote controlled SPA and to change the SPA's DOM accordingly.
 
 Under the hood PreoccupyJS consists of the next main parts:
-1. [Host](http://artsiom.mezin.eu/preoccupyjs/docs/classes/host.html) - A controller for the host tab (machine), it's responsible for the Actions (user events) collection and transmitting it to the client tab using Transport.
-2. [Client](http://artsiom.mezin.eu/preoccupyjs/docs/classes/client.html) - A controller for the client tab (machine), it's responsible for the Actions interpretaion and performing on the client page.
+1. [Host](http://artsiom.mezin.eu/preoccupyjs/docs/classes/host.html) - A controller for the host tab (machine), it's responsible for the collecting of Actions (user events) and transmitting it to the client tab using Transport.
+2. [Client](http://artsiom.mezin.eu/preoccupyjs/docs/classes/client.html) - A controller for the client tab (machine), it's responsible for the Actions interpreting and performing on the client page.
 3. [Actions](http://artsiom.mezin.eu/preoccupyjs/docs/classes/baseaction.html) - A quantum of information which is colleceted from the Host side. It describes a single user action (like click, mousemove, scroll, etc...). Each action is transmitted to the Client tab (machine) by the Transport and performed over there by the Client.
-4. [Transport](http://artsiom.mezin.eu/preoccupyjs/docs/interfaces/abstracttransport.html) - An abstract class. A Transport implementation allows actions to be transmitted from the host tab to the client one.
+4. [Transport](http://artsiom.mezin.eu/preoccupyjs/docs/interfaces/abstracttransport.html) - An abstract class. A Transport implementation allows Actions to be transmitted from the host tab to the client one.
 
 **PreoccupyJS doesn't provide an opportunity to grab, broadcast, or present a Screen Media stream. You have to take care about this part of fuctionality separetly.**
 
