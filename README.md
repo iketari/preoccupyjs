@@ -27,17 +27,84 @@ Docs: https://artsiom.mezin.eu/preoccupyjs/docs
 
 HTML report: https://artsiom.mezin.eu/preoccupyjs/coverage/lcov-report/
 
-### Usage
+### Architecture
 
-The main idea of the PreoccupyJS package is to emulate users actions within a remote controlled SPA and to change the SPA's DOM accordingly.
+The main idea of the PreoccupyJS package is to emulate users actions within a remote-controlled SPA and to change the SPA's DOM accordingly.
 
 Under the hood PreoccupyJS consists of the next main parts:
 1. [Host](http://artsiom.mezin.eu/preoccupyjs/docs/classes/host.html) - A controller for the host tab (machine), it's responsible for the collecting of Actions (user events) and transmitting it to the client tab using Transport.
 2. [Client](http://artsiom.mezin.eu/preoccupyjs/docs/classes/client.html) - A controller for the client tab (machine), it's responsible for the Actions interpreting and performing on the client page.
-3. [Actions](http://artsiom.mezin.eu/preoccupyjs/docs/classes/baseaction.html) - A quantum of information which is colleceted from the Host side. It describes a single user action (like click, mousemove, scroll, etc...). Each action is transmitted to the Client tab (machine) by the Transport and performed over there by the Client.
+3. [Actions](http://artsiom.mezin.eu/preoccupyjs/docs/classes/baseaction.html) - A quantum of information which is collected from the Host side. It describes a single user action (like click, mousemove, scroll, etc...). Each action is transmitted to the Client tab (machine) by the Transport and performed over there by the Client.
 4. [Transport](http://artsiom.mezin.eu/preoccupyjs/docs/interfaces/abstracttransport.html) - An abstract class. A Transport implementation allows Actions to be transmitted from the host tab to the client one.
 
-**PreoccupyJS doesn't provide an opportunity to grab, broadcast, or present a Screen Media stream. You have to take care about this part of fuctionality separetly.**
+**PreoccupyJS doesn't provide a functionality to grab, broadcast, or present a Screen Media stream. You have to take care about this part of fuctionality separetly.**
+
+### Basic Usage
+
+Install from NPM
+
+```bash
+npm install --save-dev preoccupyjs
+```
+
+On the Host side:
+
+1. Import the Host and required Transport constructors
+
+```javascript
+import { Host, RxjsTransport } from 'preoccupyjs';
+```
+
+2. Preapre a focusable DOM element, which is going to play a role of "touch screen" for the remote controller.
+
+```javascript
+const hostEl = document.createElement('div'); // fill free to style and modify this element as you wish, but don't delete it!
+
+hostEl.tabIndex = 0; // make it focusable
+```
+
+3. Set up the transport
+
+```javascript
+const transport = new RxjsTransport(options as {
+    subject: Subject<object>; // an AnonymousSubject, e.g. WebSocketSubject
+    wrapFn?: (data: Message) => object; // wraps a preoccupyJS message to make it fits for your Subject type
+});
+```
+
+4. Set up and run the host
+
+```javascript
+const host = new Host(transport, hostEl);
+
+host.start(); // run the communication whenever your app is ready!
+```
+
+On the client side:
+
+1. Import the Client, DomController, and required Transport constructors
+
+```javascript
+import { Host, RxjsTransport } from 'preoccupyjs';
+```
+
+2. Set up the transport
+
+```javascript
+const transport = new RxjsTransport(options as {
+    subject: Subject<object>; // an AnonymousSubject, e.g. WebSocketSubject
+    filterFn?: (rawMsg: object) => boolean; // filter all messages in subject to avoid non-preoccupyjs related
+});
+```
+
+3. Set up and run the client
+
+```javascript
+const client = new Client(transport, new DomController(document.body)); // you can specify the controlled scope of the page by passing any other DOM element
+
+client.start(); // run the communication whenever your app is ready!
+```
+
 
 ### Features
 
