@@ -32,10 +32,10 @@ HTML report: https://artsiom.mezin.eu/preoccupyjs/coverage/lcov-report/
 The main idea of the PreoccupyJS package is to emulate users actions within a remote controlled SPA and to change the SPA's DOM accordingly.
 
 Under the hood PreoccupyJS consists of the next main parts:
-1. (Host)[http://artsiom.mezin.eu/preoccupyjs/docs/classes/host.html] - A class for the tab (machine) who is going to take controll of the remote machine.
-2. (Client)[http://artsiom.mezin.eu/preoccupyjs/docs/classes/client.html] - A class for the tab (machine) who is going to be controlled remotly.
-3. (Actions)[http://artsiom.mezin.eu/preoccupyjs/docs/classes/baseaction.html] - A quantum of information which is colleceted from the Host side and describes a single user action (like click, mousemove, scroll, etc...). Each action is transmitted to the Client tab (machine) and performed over there by the Transport.
-4. (Transport)[http://artsiom.mezin.eu/preoccupyjs/docs/interfaces/abstracttransport.html] - An abstract class which describes how actions is going to be transmitted from the host tab to the client one.
+1. [Host](http://artsiom.mezin.eu/preoccupyjs/docs/classes/host.html) - A class for the tab (machine) who is going to take controll of the remote machine.
+2. [Client](http://artsiom.mezin.eu/preoccupyjs/docs/classes/client.html) - A class for the tab (machine) who is going to be controlled remotly.
+3. [Actions](http://artsiom.mezin.eu/preoccupyjs/docs/classes/baseaction.html) - A quantum of information which is colleceted from the Host side and describes a single user action (like click, mousemove, scroll, etc...). Each action is transmitted to the Client tab (machine) and performed over there by the Transport.
+4. [Transport](http://artsiom.mezin.eu/preoccupyjs/docs/interfaces/abstracttransport.html) - An abstract class which describes how actions is going to be transmitted from the host tab to the client one.
 
 **PreoccupyJS doesn't provide an opportunity to grab, broadcast, or present a Screen Media stream. You have to take care about this part of fuctionality separetly.**
 
