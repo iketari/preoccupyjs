@@ -21,11 +21,7 @@ An emulator of user behavioural actions for SPAs. Could be used as a part of Rem
 
 ### Docs
 
-Docs: https://artsiom.mezin.eu/preoccupyjs/docs
-
-### Coverage
-
-HTML report: https://artsiom.mezin.eu/preoccupyjs/coverage/lcov-report/
+https://artsiom.mezin.eu/preoccupyjs/docs
 
 ### Architecture
 
@@ -105,11 +101,10 @@ const client = new Client(transport, new DomController(document.body)); // you c
 client.start(); // run the communication whenever your app is ready!
 ```
 
-
 ### Features
 
- - Module structure. You can reuse existing Actions or replace/extend it by your own
- - Transport agnostic. It's up to you how to transmit the actions between host and client browser tabs
+ - Preoccupyjs has a modular structure. You can reuse existing Actions or replace/extend it by your own.
+ - Preoccupyjs is totally transport agnostic. It's up to you how to transmit the actions between host and client browser tab.
 
 ### Importing library
 
