@@ -5,6 +5,11 @@
   <title>(CHOOSE ME) PreoccupyJS. Test Application</title>
   <base href="https://artsiom.mezin.eu/preoccupyjs/demo/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    if (location.hostname !== 'localhost' && location.protocol !== 'https:') {
+      location.href = location.href.replace('http', 'https');
+    }
+  </script>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
   <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
@@ -12,5 +17,5 @@
 <link rel="stylesheet" href="https://artsiom.mezin.eu/preoccupyjs/demo/styles.788962dd4336991e1034.css"></head>
 <body>
   <app-root></app-root>
-<script type="text/javascript" src="https://artsiom.mezin.eu/preoccupyjs/demo/runtime.a2e4297719f14efdc3f3.js"></script><script type="text/javascript" src="https://artsiom.mezin.eu/preoccupyjs/demo/polyfills.fec146f4472ee5fb9cac.js"></script><script type="text/javascript" src="https://artsiom.mezin.eu/preoccupyjs/demo/scripts.cce085910183b991c046.js"></script><script type="text/javascript" src="https://artsiom.mezin.eu/preoccupyjs/demo/vendor.c10116e813a52b312c06.js"></script><script type="text/javascript" src="https://artsiom.mezin.eu/preoccupyjs/demo/main.3cc0b78913851e1af687.js"></script></body>
+<script type="text/javascript" src="https://artsiom.mezin.eu/preoccupyjs/demo/runtime.a2e4297719f14efdc3f3.js"></script><script type="text/javascript" src="https://artsiom.mezin.eu/preoccupyjs/demo/polyfills.fec146f4472ee5fb9cac.js"></script><script type="text/javascript" src="https://artsiom.mezin.eu/preoccupyjs/demo/scripts.cce085910183b991c046.js"></script><script type="text/javascript" src="https://artsiom.mezin.eu/preoccupyjs/demo/vendor.915e4b9516cce02cbf48.js"></script><script type="text/javascript" src="https://artsiom.mezin.eu/preoccupyjs/demo/main.5026376ef2fa8380691a.js"></script></body>
 </html>
