@@ -21,7 +21,7 @@ export class RightClickToAction extends BaseAction implements PreoccupyAction {
   }
 
   static handleEvent(host: Host, event: Event): PreoccupyAction {
-    let e = <MouseEvent>event;
+    let e = event as MouseEvent;
     event.preventDefault();
     const payload = {
       ...host.getRelativeCoordinate(e),
