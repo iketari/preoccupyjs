@@ -37,6 +37,14 @@
       </label>
     </div>
   </div>
+  <div class="form-group">
+    <div class="col-3 col-sm-12">
+      <label class="form-label">Context menu</label>
+    </div>
+    <div (contextmenu)="onContextMenu($event)" class="col-9 col-sm-12">
+      <input class="form-input" placeholder="Open a context menu" name="contextmenuField" id="contextmenuField" type="text">
+    </div>
+  </div>
 
   <input class="btn btn-primary" type="submit" value="submit">
   <p>Result:</p>

@@ -68,7 +68,7 @@ describe('DomController', () => {
       dom.clickTo({ x: 0, y: 0 });
       dom.mouseDownTo({ x: 0, y: 0 });
       dom.mouseUpTo({ x: 0, y: 0 });
-      dom.rightClickTo({ x: 0, y: 0 });
+      dom.rightClickTo({ x: 0, y: 0, button: 1 });
       dom.dblClickTo({ x: 0, y: 0 });
 
       dom.keydown({});

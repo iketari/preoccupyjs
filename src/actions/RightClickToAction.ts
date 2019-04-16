@@ -9,6 +9,7 @@ export class RightClickToAction extends BaseAction implements PreoccupyAction {
     public payload: {
       x: number;
       y: number;
+      button: number;
     }
   ) {
     super();
@@ -20,8 +21,13 @@ export class RightClickToAction extends BaseAction implements PreoccupyAction {
   }
 
   static handleEvent(host: Host, event: Event): PreoccupyAction {
+    let e = <MouseEvent>event;
     event.preventDefault();
-    const payload = host.getRelativeCoordinate(event as MouseEvent);
+    const payload = {
+      ...host.getRelativeCoordinate(e),
+      button: e.button
+    };
+
     return new RightClickToAction(payload);
   }
 }

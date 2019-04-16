@@ -18,4 +18,9 @@ export class FormComponent {
       console.log(this.formResult, formData.entries())
   }
 
+  onContextMenu(event) {
+    window['contextmenuField'].value = `Event.button: ${event.button}`;
+    event.preventDefault();
+  }
+
 }

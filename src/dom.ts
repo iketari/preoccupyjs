@@ -74,14 +74,21 @@ export class DomController {
     this.fireEvent('click', el, options);
   }
 
-  public rightClickTo(coordinates: Coordinates) {
-    const payload = this.getMouseEventPayload(coordinates);
+  public rightClickTo(event: Partial<MouseEvent>) {
+    const { x, y, button } = event;
+    const payload = this.getMouseEventPayload({ x, y });
 
     if (payload === null) {
       return;
     }
 
-    this.fireEvent('contextmenu', ...payload);
+    let [el, options] = payload;
+    options = {
+      ...options,
+      button
+    };
+
+    this.fireEvent('contextmenu', el, options);
   }
 
   public dblClickTo(coordinates: Coordinates) {
