@@ -33,7 +33,7 @@ Under the hood PreoccupyJS consists of the next main parts:
 3. [Actions](http://artsiom.mezin.eu/preoccupyjs/docs/classes/baseaction.html) - A quantum of information which is collected from the Host side. It describes a single user action (like click, mousemove, scroll, etc...). Each action is transmitted to the Client tab (machine) by the Transport and performed over there by the Client.
 4. [Transport](http://artsiom.mezin.eu/preoccupyjs/docs/interfaces/abstracttransport.html) - An abstract class. A Transport implementation allows Actions to be transmitted from the host tab to the client one.
 
-**PreoccupyJS doesn't provide a functionality to grab, broadcast, or present a Screen Media stream. You have to take care about this part of fuctionality separetly.**
+**PreoccupyJS doesn't provide any functionality to grab, broadcast, or present Screen Media streams. You have to take care about this part of fuctionality separetly.**
 
 ### Basic Usage
 
