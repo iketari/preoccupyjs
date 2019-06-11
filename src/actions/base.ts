@@ -1,5 +1,6 @@
 import { DomController } from '../dom';
 import { Host } from '../host';
+
 export enum ActionsName {
   BASE = '[Action] Base',
   MOVE_TO = '[Action] Move To',

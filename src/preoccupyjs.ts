@@ -7,6 +7,7 @@ import { DEBUG_FLAG } from './utils';
 export * from './client';
 export * from './host';
 export * from './transports';
+export * from './actions';
 
 export { DEBUG_FLAG } from './utils';
 
