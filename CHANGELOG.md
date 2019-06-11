@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+## [1.1.9](https://github.com/iketari/preoccupyjs/compare/v1.1.8...v1.1.9) (2019-06-11)
+
+
+### Bug Fixes
+
+* **src/*:** Export all neccessary classes to implement a Transport outside the library ([a1b6c35](https://github.com/iketari/preoccupyjs/commit/a1b6c35))
+
 ## [1.1.8](https://github.com/iketari/preoccupyjs/compare/v1.1.7...v1.1.8) (2019-04-16)
 
 
