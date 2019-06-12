@@ -11,7 +11,7 @@ export class DomController {
   public init() {
     this.cursor.moveTo({ x: 0, y: 0 });
 
-    const bodyEl = this.el.querySelector('body');
+    const bodyEl = document.body;
     if (getComputedStyle(this.el).position !== 'static') {
       this.el.appendChild(this.cursor.getEl());
     } else {
