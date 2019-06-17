@@ -1,0 +1,15 @@
+.avatar {
+    width: 84px;
+    height: 84px;
+    background: 50% 16% url('./../assets/occupy_logo.png');
+    background-size: 115%;
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+}
+
+    .menu-item {
+        margin-top: 0;
+    }

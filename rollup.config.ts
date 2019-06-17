@@ -1,24 +1,26 @@
-import resolve from 'rollup-plugin-node-resolve'
-import commonjs from 'rollup-plugin-commonjs'
-import sourceMaps from 'rollup-plugin-sourcemaps'
-import camelCase from 'lodash.camelcase'
-import typescript from 'rollup-plugin-typescript2'
-import json from 'rollup-plugin-json'
+import resolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
+import sourceMaps from 'rollup-plugin-sourcemaps';
+import camelCase from 'lodash.camelcase';
+import typescript from 'rollup-plugin-typescript2';
+import json from 'rollup-plugin-json';
+import copy from 'rollup-plugin-copy';
 
-const pkg = require('./package.json')
+const pkg = require('./src/package.json');
+const distFldr = 'dist';
 
-const libraryName = 'preoccupyjs'
+const libraryName = 'preoccupyjs';
 
 export default {
   input: `src/${libraryName}.ts`,
   output: [
-    { file: pkg.main, name: camelCase(libraryName), format: 'umd', sourcemap: true },
-    { file: pkg.module, format: 'es', sourcemap: true },
+    { file: `${distFldr}/${pkg.main}`, name: camelCase(libraryName), format: 'umd', sourcemap: true },
+    { file: `${distFldr}/${pkg.module}`, format: 'es', sourcemap: true }
   ],
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
-  external: [],
+  external: ['rxjs'],
   watch: {
-    include: 'src/**',
+    include: 'src/**'
   },
   plugins: [
     // Allow json resolution
@@ -34,5 +36,10 @@ export default {
 
     // Resolve source maps to the original source
     sourceMaps(),
-  ],
-}
+
+    copy({
+      'src/package.json': 'dist/package.json',
+      'README.md': 'dist/README.md'
+    })
+  ]
+};

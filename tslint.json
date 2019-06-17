@@ -2,5 +2,10 @@
   "extends": [
     "tslint-config-standard",
     "tslint-config-prettier"
-  ]
+  ],
+  "rules": {
+    "deprecation": false,
+    "noImplicitAny": false,
+    "no-empty": false
+  }
 }

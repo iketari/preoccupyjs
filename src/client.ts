@@ -1,39 +1,45 @@
-import { PreoccupyTransport, TransportEvents, Message } from './transports';
-import { ActionUnion, ActionsName } from './actions';
+import { actionMap } from './actions';
+import { PreoccupyAction, RawPreoccupyAction } from './actions/base';
 import { DomController } from './dom';
+import { AbstractTransport, Message, TransportEvents } from './transports';
 
-export default class Client {
-    constructor(
-        transport: PreoccupyTransport,
-        private dom: DomController
-    ) {
-        transport.on(TransportEvents.connect, (event) => {
-            console.log(event);
-            this.calibrate();
-        });
+const STACK_LENGTH = 30;
 
-        transport.on(TransportEvents.action, (event) => {
-            const message: Message = event.detail;
-            this.perform(message.data as ActionUnion); // TODO: Transport for Actions?
-        });
+export class Client {
+  private actionStack: PreoccupyAction[] = [];
+  private actions: Map<string, any> = actionMap;
+
+  constructor(private transport: AbstractTransport, private dom: DomController) {}
+
+  public perform(rawAction: RawPreoccupyAction) {
+    if (this.actions.has(rawAction.type)) {
+      const Action = this.actions.get(rawAction.type);
+      const action = new Action(rawAction.payload) as PreoccupyAction;
+
+      action.performEvent(this.dom, this.actionStack);
+      this.actionStack.push(action);
+      while (this.actionStack.length > STACK_LENGTH) {
+        this.actionStack.shift();
+      }
     }
+  }
 
-    public calibrate() {
-        // to implement
-    }
+  public start() {
+    this.transport.on(TransportEvents.connect, event => {
+      this.dom.init();
+    });
 
-    public perform(action: ActionUnion) {
-        switch (action.type) {
-            case ActionsName.MOVE_TO:
-                this.dom.moveCursorTo(action.payload.x, action.payload.y);
-                break;
+    this.transport.on(TransportEvents.action, event => {
+      const message: Message = event.detail;
 
-            case ActionsName.CLICK_TO:
-                this.dom.clickTo(action.payload.x, action.payload.y);
+      this.perform(message.data as RawPreoccupyAction);
+    });
 
-            default:
-                break;
-        }
-    }
+    this.transport.handshake();
+  }
 
+  public stop() {
+    this.transport.disconnect();
+    this.dom.destroy();
+  }
 }

@@ -1,0 +1,5 @@
+<h3>Scroll me gently!</h3>
+
+<div #scrollable (wheel)="onScroll($event)" (scroll)="onScroll($event)"  class="scrollable">
+  <p *ngFor="let date of dates">Date: {{date.toLocaleString()}}</p>
+</div>

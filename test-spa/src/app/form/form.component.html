@@ -1,0 +1,52 @@
+<h3>Form me handsomly!</h3>
+<form class="form-horizontal" (submit)="onFormSubmit($event)">
+  <div class="form-group">
+    <div class="col-3 col-sm-12">
+      <label class="form-label" for="textField">Form field #1</label>
+    </div>
+    <div class="col-3 col-sm-12">
+      <input class="form-input" name="textField" id="textField" type="text">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-3 col-sm-12">
+      <label class="form-label" for="textArea">Form field #2</label>
+    </div>
+    <div class="col-3 col-sm-12">
+      <textarea class="form-input" name="textArea" id="textArea"></textarea>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-3 col-sm-12">
+      <label for="checkbox">Form field #3</label>
+    </div>
+    <div class="col-3 col-sm-12">
+      <input name="checkbox" type="checkbox" id="checkbox"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-3 col-sm-12">
+      <label class="form-label">Type</label>
+    </div>
+    <div class="col-9 col-sm-12">
+      <label class="form-radio">
+        <input value="Email" type="radio" name="radio"><i class="form-icon"></i> Email
+      </label>
+      <label class="form-radio">
+        <input value="Phone" type="radio" name="radio"><i class="form-icon"></i> Phone
+      </label>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-3 col-sm-12">
+      <label class="form-label">Context menu</label>
+    </div>
+    <div (contextmenu)="onContextMenu($event)" class="col-9 col-sm-12">
+      <input class="form-input" placeholder="Open a context menu" name="contextmenuField" id="contextmenuField" type="text">
+    </div>
+  </div>
+
+  <input class="btn btn-primary" type="submit" value="submit">
+  <p>Result:</p>
+  <div class="result">{{formResult}}</div>
+</form>

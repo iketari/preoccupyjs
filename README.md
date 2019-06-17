@@ -1,51 +1,123 @@
-# TypeScript library starter
+# PreoccupyJS
+
+<p align="center">
+    <img src="https://github.com/iketari/preoccupyjs/raw/master/test-spa/src/assets/occupy_logo.png" alt="PrepoccupyJS's custom image"/>
+</p>
 
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![Greenkeeper badge](https://badges.greenkeeper.io/alexjoverm/typescript-library-starter.svg)](https://greenkeeper.io/)
-[![Travis](https://img.shields.io/travis/alexjoverm/typescript-library-starter.svg)](https://travis-ci.org/alexjoverm/typescript-library-starter)
-[![Coveralls](https://img.shields.io/coveralls/alexjoverm/typescript-library-starter.svg)](https://coveralls.io/github/alexjoverm/typescript-library-starter)
-[![Dev Dependencies](https://david-dm.org/alexjoverm/typescript-library-starter/dev-status.svg)](https://david-dm.org/alexjoverm/typescript-library-starter?type=dev)
-[![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://paypal.me/AJoverMorales)
+[![Travis](https://img.shields.io/travis/iketari/preoccupyjs.svg)](https://travis-ci.org/iketari/preoccupyjs)
+[![Coveralls](https://img.shields.io/coveralls/iketari/preoccupyjs.svg)](https://coveralls.io/github/iketari/preoccupyjs)
+[![Dev Dependencies](https://david-dm.org/iketari/preoccupyjs/dev-status.svg)](https://david-dm.org/iketari/preoccupyjs?type=dev)
 
-A starter project that makes creating a TypeScript library extremely easy.
+An emulator of user behavioural actions for SPAs. Could be used as a part of Remote Control functionality.
 
-![](https://i.imgur.com/opUmHp0.png)
+### Demo
 
-### Usage
+1. Open https://artsiom.mezin.eu/preoccupyjs/demo.
+2. Click **Activate remote control**.
+3. Click **Control** to open a new tab, it's going to open a new tab.
+4. In the new tab click **Connect**. You will see a system dialog to choose the window to broadcast the screen media. Please, select the third tab with the title "Chrome Tab". From the options list select the tab with the title "PreoccupyJS. Test Application".
+5. Enjoy!
+
+### Docs
+
+https://artsiom.mezin.eu/preoccupyjs/docs
+
+### Architecture
+
+The main idea of the PreoccupyJS package is to emulate users actions within a remote-controlled SPA and to change the SPA's DOM accordingly.
+
+Under the hood PreoccupyJS consists of the next main parts:
+1. [Host](http://artsiom.mezin.eu/preoccupyjs/docs/classes/host.html) - A controller for the host tab (machine), it's responsible for the collecting of Actions (user events) and transmitting it to the client tab using Transport.
+2. [Client](http://artsiom.mezin.eu/preoccupyjs/docs/classes/client.html) - A controller for the client tab (machine), it's responsible for the Actions interpreting and performing on the client page.
+3. [Actions](http://artsiom.mezin.eu/preoccupyjs/docs/classes/baseaction.html) - A quantum of information which is collected from the Host side. It describes a single user action (like click, mousemove, scroll, etc...). Each action is transmitted to the Client tab (machine) by the Transport and performed over there by the Client.
+4. [Transport](http://artsiom.mezin.eu/preoccupyjs/docs/interfaces/abstracttransport.html) - An abstract class. A Transport implementation allows Actions to be transmitted from the host tab to the client one.
+
+**PreoccupyJS doesn't provide any functionality to grab, broadcast, or present Screen Media streams. You have to take care about this part of fuctionality separetly.**
+
+### Basic Usage
+
+Install from NPM
 
 ```bash
-git clone https://github.com/alexjoverm/typescript-library-starter.git YOURFOLDERNAME
-cd YOURFOLDERNAME
-
-# Run npm install and write your library name when asked. That's all!
-npm install
+npm install --save-dev preoccupyjs
 ```
 
-**Start coding!** `package.json` and entry files are already set up for you, so don't worry about linking to your main file, typings, etc. Just keep those files with the same name.
+On the Host side:
+
+1. Import the Host and required Transport constructors
+
+```javascript
+import { Host, RxjsTransport } from 'preoccupyjs';
+```
+
+2. Preapre a focusable DOM element, which is going to play a role of "touch screen" for the remote controller.
+
+```javascript
+const hostEl = document.createElement('div'); // fill free to style and modify this element as you wish, but don't delete it!
+
+hostEl.tabIndex = 0; // make it focusable
+```
+
+3. Set up the transport
+
+```javascript
+const transport = new RxjsTransport(options as {
+    subject: Subject<object>; // an AnonymousSubject, e.g. WebSocketSubject
+    wrapFn?: (data: Message) => object; // wraps a preoccupyJS message to make it fits for your Subject type
+});
+```
+
+4. Set up and run the host
+
+```javascript
+const host = new Host(transport, hostEl);
+
+host.start(); // run the communication whenever your app is ready!
+```
+
+On the client side:
+
+1. Import the Client, DomController, and required Transport constructors
+
+```javascript
+import { Host, RxjsTransport } from 'preoccupyjs';
+```
+
+2. Set up the transport
+
+```javascript
+const transport = new RxjsTransport(options as {
+    subject: Subject<object>; // an AnonymousSubject, e.g. WebSocketSubject
+    filterFn?: (rawMsg: object) => boolean; // filter all messages in subject to avoid non-preoccupyjs related
+});
+```
+
+3. Set up and run the client
+
+```javascript
+const client = new Client(transport, new DomController(document.body)); // you can specify the controlled scope of the page by passing any other DOM element
+
+client.start(); // run the communication whenever your app is ready!
+```
 
 ### Features
 
- - Zero-setup. After running `npm install` things will setup for you :wink:
- - **[RollupJS](https://rollupjs.org/)** for multiple optimized bundles following the [standard convention](http://2ality.com/2017/04/setting-up-multi-platform-packages.html) and [Tree-shaking](https://alexjoverm.github.io/2017/03/06/Tree-shaking-with-Webpack-2-TypeScript-and-Babel/)
- - Tests, coverage and interactive watch mode using **[Jest](http://facebook.github.io/jest/)**
- - **[Prettier](https://github.com/prettier/prettier)** and **[TSLint](https://palantir.github.io/tslint/)** for code formatting and consistency
- - **Docs automatic generation and deployment** to `gh-pages`, using **[TypeDoc](http://typedoc.org/)**
- - Automatic types `(*.d.ts)` file generation
- - **[Travis](https://travis-ci.org)** integration and **[Coveralls](https://coveralls.io/)** report
- - (Optional) **Automatic releases and changelog**, using [Semantic release](https://github.com/semantic-release/semantic-release), [Commitizen](https://github.com/commitizen/cz-cli), [Conventional changelog](https://github.com/conventional-changelog/conventional-changelog) and [Husky](https://github.com/typicode/husky) (for the git hooks)
+ - Preoccupyjs has a modular structure. You can reuse existing Actions or replace/extend it by your own.
+ - Preoccupyjs is totally transport agnostic. It's up to you how to transmit the actions between host and client browser tab.
 
 ### Importing library
 
 You can import the generated bundle to use the whole library generated by this starter:
 
 ```javascript
-import myLib from 'mylib'
+import { createHost, createClient } from 'preoccupyjs';
 ```
 
-Additionally, you can import the transpiled modules from `dist/lib` in case you have a modular library:
+Additionally, you can import the transpiled modules (transports, actions) from `dist/lib`:
 
 ```javascript
-import something from 'mylib/dist/lib/something'
+import { DblClickToAction } from 'preoccupyjs/lib/actions/DblClickToAction';
 ```
 
 ### NPM scripts
@@ -122,48 +194,4 @@ import "core-js/fn/promise"
 ...
 ```
 
-#### What is `npm install` doing on first run?
-
-It runs the script `tools/init` which sets up everything for you. In short, it:
- - Configures RollupJS for the build, which creates the bundles
- - Configures `package.json` (typings file, main file, etc)
- - Renames main src and test files
-
-#### What if I don't want git-hooks, automatic releases or semantic-release?
-
-Then you may want to:
- - Remove `commitmsg`, `postinstall` scripts from `package.json`. That will not use those git hooks to make sure you make a conventional commit
- - Remove `npm run semantic-release` from `.travis.yml`
-
-#### What if I don't want to use coveralls or report my coverage?
-
-Remove `npm run report-coverage` from `.travis.yml`
-
-## Resources
-
-- [Write a library using TypeScript library starter](https://dev.to/alexjoverm/write-a-library-using-typescript-library-starter) by [@alexjoverm](https://github.com/alexjoverm/)
-- [📺 Create a TypeScript Library using typescript-library-starter](https://egghead.io/lessons/typescript-create-a-typescript-library-using-typescript-library-starter) by [@alexjoverm](https://github.com/alexjoverm/)
-- [Introducing TypeScript Library Starter Lite](https://blog.tonysneed.com/2017/09/15/introducing-typescript-library-starter-lite/) by [@tonysneed](https://github.com/tonysneed)
-
-## Projects using `typescript-library-starter`
-
-Here are some projects that use `typescript-library-starter`:
-
-- [NOEL - A universal, human-centric, replayable event emitter](https://github.com/lifenautjoe/noel)
-- [droppable - A library to give file dropping super-powers to any HTML element.](https://github.com/lifenautjoe/droppable)
-- [redis-messaging-manager - Pubsub messaging library, using redis and rxjs](https://github.com/tomyitav/redis-messaging-manager)
-
-## Credits
-
-Made with :heart: by [@alexjoverm](https://twitter.com/alexjoverm) and all these wonderful contributors ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
-| [<img src="https://avatars.githubusercontent.com/u/6052309?v=3" width="100px;"/><br /><sub><b>Ciro</b></sub>](https://www.linkedin.com/in/ciro-ivan-agulló-guarinos-42109376)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=k1r0s "Code") [🔧](#tool-k1r0s "Tools") | [<img src="https://avatars.githubusercontent.com/u/947523?v=3" width="100px;"/><br /><sub><b>Marius Schulz</b></sub>](https://blog.mariusschulz.com)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=mariusschulz "Documentation") | [<img src="https://avatars.githubusercontent.com/u/4152819?v=3" width="100px;"/><br /><sub><b>Alexander Odell</b></sub>](https://github.com/alextrastero)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=alextrastero "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/8728882?v=3" width="100px;"/><br /><sub><b>Ryan Ham</b></sub>](https://github.com/superamadeus)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=superamadeus "Code") | [<img src="https://avatars1.githubusercontent.com/u/8458838?v=3" width="100px;"/><br /><sub><b>Chi</b></sub>](https://consiiii.me)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=ChinW "Code") [🔧](#tool-ChinW "Tools") [📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=ChinW "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/2856501?v=3" width="100px;"/><br /><sub><b>Matt Mazzola</b></sub>](https://github.com/mattmazzola)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=mattmazzola "Code") [🔧](#tool-mattmazzola "Tools") | [<img src="https://avatars0.githubusercontent.com/u/2664047?v=3" width="100px;"/><br /><sub><b>Sergii Lischuk</b></sub>](http://leefrost.github.io)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=Leefrost "Code") |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| [<img src="https://avatars1.githubusercontent.com/u/618922?v=3" width="100px;"/><br /><sub><b>Steve Lee</b></sub>](http;//opendirective.com)<br />[🔧](#tool-SteveALee "Tools") | [<img src="https://avatars0.githubusercontent.com/u/5127501?v=3" width="100px;"/><br /><sub><b>Flavio Corpa</b></sub>](http://flaviocorpa.com)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=kutyel "Code") | [<img src="https://avatars2.githubusercontent.com/u/22561997?v=3" width="100px;"/><br /><sub><b>Dom</b></sub>](https://github.com/foreggs)<br />[🔧](#tool-foreggs "Tools") | [<img src="https://avatars1.githubusercontent.com/u/755?v=4" width="100px;"/><br /><sub><b>Alex Coles</b></sub>](http://alexbcoles.com)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=myabc "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/1093738?v=4" width="100px;"/><br /><sub><b>David Khourshid</b></sub>](https://github.com/davidkpiano)<br />[🔧](#tool-davidkpiano "Tools") | [<img src="https://avatars0.githubusercontent.com/u/7225802?v=4" width="100px;"/><br /><sub><b>Aarón García Hervás</b></sub>](https://aarongarciah.com)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=aarongarciah "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/13683986?v=4" width="100px;"/><br /><sub><b>Jonathan Hart</b></sub>](https://www.stuajnht.co.uk)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=stuajnht "Code") |
-| [<img src="https://avatars0.githubusercontent.com/u/13509204?v=4" width="100px;"/><br /><sub><b>Sanjiv Lobo</b></sub>](https://github.com/Xndr7)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=Xndr7 "Documentation") | [<img src="https://avatars3.githubusercontent.com/u/7473800?v=4" width="100px;"/><br /><sub><b>Stefan Aleksovski</b></sub>](https://github.com/sAleksovski)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=sAleksovski "Code") | [<img src="https://avatars2.githubusercontent.com/u/8853426?v=4" width="100px;"/><br /><sub><b>dev.peerapong</b></sub>](https://github.com/devpeerapong)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=devpeerapong "Code") | [<img src="https://avatars0.githubusercontent.com/u/22260722?v=4" width="100px;"/><br /><sub><b>Aaron Groome</b></sub>](http://twitter.com/Racing5372)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=Racing5372 "Documentation") | [<img src="https://avatars3.githubusercontent.com/u/180963?v=4" width="100px;"/><br /><sub><b>Aaron Reisman</b></sub>](https://github.com/lifeiscontent)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=lifeiscontent "Code") | [<img src="https://avatars1.githubusercontent.com/u/32557482?v=4" width="100px;"/><br /><sub><b>kid-sk</b></sub>](https://github.com/kid-sk)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=kid-sk "Documentation") | [<img src="https://avatars0.githubusercontent.com/u/1503089?v=4" width="100px;"/><br /><sub><b>Andrea Gottardi</b></sub>](http://about.me/andreagot)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=AndreaGot "Documentation") |
-| [<img src="https://avatars3.githubusercontent.com/u/1375860?v=4" width="100px;"/><br /><sub><b>Yogendra Sharma</b></sub>](http://TechiesEyes.com)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=Yogendra0Sharma "Documentation") | [<img src="https://avatars3.githubusercontent.com/u/7407177?v=4" width="100px;"/><br /><sub><b>Rayan Salhab</b></sub>](http://linkedin.com/in/rayan-salhab/)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=cyphercodes "Code") |
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind are welcome!
+Contributions of any kind are welcome!
