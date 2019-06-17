@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+## [1.1.11](https://github.com/iketari/preoccupyjs/compare/v1.1.10...v1.1.11) (2019-06-17)
+
+
+### Bug Fixes
+
+* **src/dom.ts:** Improve scroll action behaviour ([2192ce7](https://github.com/iketari/preoccupyjs/commit/2192ce7))
+
 ## [1.1.10](https://github.com/iketari/preoccupyjs/compare/v1.1.9...v1.1.10) (2019-06-12)
 
 
