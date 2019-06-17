@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+## [1.1.10](https://github.com/iketari/preoccupyjs/compare/v1.1.9...v1.1.10) (2019-06-12)
+
+
+### Bug Fixes
+
+* **dom.ts:** Fix bug with finding body element ([2bd3903](https://github.com/iketari/preoccupyjs/commit/2bd3903))
+
 ## [1.1.9](https://github.com/iketari/preoccupyjs/compare/v1.1.8...v1.1.9) (2019-06-11)
 
 
