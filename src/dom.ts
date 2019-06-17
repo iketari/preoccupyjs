@@ -179,13 +179,19 @@ export class DomController {
     let initialEl = this.getElementFromPoint(this.getAbsoluteCoordinates({ x, y })) as HTMLElement;
     let scrollableEl: HTMLElement | undefined;
     let el = initialEl;
+    let isVerticalScrollAction = deltaY !== 0;
 
     if (!el) {
       return;
     }
 
     while (el && el.parentElement) {
-      if (this.isScrollable(el)) {
+      if (isVerticalScrollAction && this.isScrollableY(el)) {
+        scrollableEl = el;
+        break;
+      }
+
+      if (!isVerticalScrollAction && this.isScrollableX(el)) {
         scrollableEl = el;
         break;
       }
@@ -194,13 +200,14 @@ export class DomController {
     }
 
     if (!scrollableEl) {
-      scrollableEl = document.body;
+      scrollableEl = this.getScrollingElement();
     }
 
-    scrollableEl.scrollBy({
-      left: deltaX,
-      top: deltaY
-    });
+    if (isVerticalScrollAction) {
+      scrollableEl.scrollBy({ top: deltaY });
+    } else {
+      scrollableEl.scrollBy({ top: deltaX });
+    }
 
     this.fireEvent('wheel', el);
     this.fireEvent('scroll', el);
@@ -298,5 +305,9 @@ export class DomController {
   private isScrollableY(el: HTMLElement) {
     const style = getComputedStyle(el);
     return ['auto', 'scroll'].includes(style.overflowY) && el.scrollHeight > el.clientHeight;
+  }
+
+  private getScrollingElement(): HTMLElement {
+    return (document.scrollingElement || document.documentElement) as HTMLElement;
   }
 }
